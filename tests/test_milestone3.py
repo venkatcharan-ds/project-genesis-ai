@@ -243,3 +243,42 @@ def test_false_alarm_onsets_counted_per_clean_day():
             {"episode_id": 2, "confusion": {"tp": 0, "fp": 0, "tn": 10, "fn": 0}, "leak_type": None,
              "false_alarm": False, "any_false_alarm": False, "fa_onsets": 0}]
     assert metrics_from_rows(rows)["false_alarms_per_clean_day"] == pytest.approx(1.5)
+
+
+# -- REGRESSION: cold-start absorption found in the first confirmatory run (v1 -> v2) ----
+V2 = dict(raw_k_uncertain=3.0, meter_shift_requires_site_pressure=True)
+
+
+def test_regression_v1_cold_start_meter_shift_absorbs_leak(train_sites):
+    """v1 failure kept as a test: with no site history, a leak running since day 0 was
+    called a METER_SHIFT against the population pressure prior and absorbed on day 1."""
+    days = _inject_leak(_clean_site(61, days=3), from_day=0, rate=3.5)
+    v1 = build("leak_safe", **M3).fit(train_sites)
+    p = v1.predict_sequence(days)
+    assert p[0][120:].mean() > 0.8 and p[1][120:].mean() < 0.2
+
+
+def test_regression_v2_keeps_cold_start_leak_visible(train_sites):
+    days = _inject_leak(_clean_site(61, days=3), from_day=0, rate=3.5)
+    v2 = build("leak_safe", **M3, **V2).fit(train_sites)
+    p = v2.predict_sequence(days)
+    assert all(x[120:].mean() > 0.8 for x in p)
+    assert all(v2.components_[d.episode_id]["status"] != "METER_SHIFT" for d in days)
+
+
+def test_v2_defaults_off_reproduce_v1(train_sites):
+    """The v2 options are opt-in, so recorded v1 runs keep reproducing."""
+    days = _inject_leak(_clean_site(62, days=3), from_day=1, rate=5.0)
+    a = build("leak_safe", **M3).fit(train_sites).predict_sequence(days)
+    b = build("leak_safe", **M3, raw_k_uncertain=None,
+              meter_shift_requires_site_pressure=False).fit(train_sites).predict_sequence(days)
+    for x, y in zip(a, b):
+        np.testing.assert_array_equal(x, y)
+
+
+def test_v2_meter_swap_still_rebaselined_with_site_history(train_sites):
+    days = _meter_step(_clean_site(41, days=5), from_day=2, step=2.5)
+    det = build("leak_safe", **M3, **V2).fit(train_sites)
+    preds = det.predict_sequence(days)
+    assert det.components_[days[2].episode_id]["status"] == "METER_SHIFT"
+    assert preds[3].sum() == 0 and preds[4].sum() == 0

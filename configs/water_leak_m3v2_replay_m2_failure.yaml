@@ -1,0 +1,172 @@
+# GENESIS Milestone 3 v2 REPLAY of the Milestone 2 failure dataset (seed 45; seen before).
+experiment:
+  name: water_leak_m3v2_replay_m2_failure
+  synthetic: true
+  seed: 45
+problem:
+  statement: 'REPLAY of the exact Milestone 2 failure dataset (seed 45, every leak running
+
+    from minute 0, independent single days, scored from minute 120). Same
+
+    baselines, objective and split as the Milestone 2 run, plus the M3 detector.
+
+    '
+  success_criteria:
+    max_timestep_fpr: 0.01
+    max_day_false_alarm_rate: 0.05
+data:
+  n_episodes: 400
+  episode_minutes: 1440
+  leak_probability: 0.5
+  meter_bias_std: 0.5
+  demand_spike_probability: 0.3
+  warmup_minutes: 120
+  preexisting_leak_share: 1.0
+split:
+  train: 0.5
+  val: 0.25
+  test: 0.25
+candidates:
+- id: thr_raw
+  name: mass_balance_threshold
+  description: 'M1 baseline: raw residual'
+  params:
+    window: 60
+    k: 2.0
+  search_space:
+    window: &id001
+    - 5
+    - 10
+    - 15
+    - 30
+    - 60
+    - 120
+    k: &id002
+    - 1.5
+    - 2.0
+    - 3.0
+    - 4.0
+    - 5.0
+    - 6.0
+    - 8.0
+- id: thr_corr_persist
+  name: mass_balance_threshold
+  description: Corrections + alarm persistence
+  params:
+    window: 60
+    k: 2.0
+    lag_comp: true
+    recalibrate: true
+    persistence: 5
+  search_space:
+    window: *id001
+    k: *id002
+    persistence:
+    - 1
+    - 3
+    - 5
+    - 10
+    - 15
+    - 30
+- id: m3_v1
+  name: leak_safe
+  description: Milestone 3 v1 (first confirmatory version)
+  params:
+    window: 60
+    k: 3.0
+    persistence: 5
+  search_space:
+    window: &id003
+    - 15
+    - 30
+    - 60
+    - 120
+    k: &id004
+    - 2.0
+    - 3.0
+    - 4.0
+    - 5.0
+    - 6.0
+    persistence: &id005
+    - 1
+    - 5
+    - 15
+    raw_k: &id006
+    - 3.0
+    - 4.0
+    - 5.0
+    - 6.0
+    - 8.0
+    tau_shift: &id007
+    - 3.0
+    - 4.0
+    - 6.0
+    tau_prior: &id008
+    - 2.0
+    - 3.0
+    - 4.0
+    tau_pressure: &id009
+    - 3.0
+    - 4.0
+    - 6.0
+- id: m3_full
+  name: leak_safe
+  description: 'Milestone 3 v2: all safeguards + uncertain-state fallback + site-pressure meter-shift
+    rule'
+  params:
+    window: 60
+    k: 3.0
+    persistence: 5
+    raw_k_uncertain: 3.0
+    meter_shift_requires_site_pressure: true
+  search_space:
+    window: *id003
+    k: *id004
+    persistence: *id005
+    raw_k: *id006
+    tau_shift: *id007
+    tau_prior: *id008
+    tau_pressure: *id009
+    raw_k_uncertain:
+    - 2.0
+    - 3.0
+    - 4.0
+hypotheses:
+- id: P1
+  statement: 'Exact Milestone 2 failure dataset (leaks running from minute 0, single days): M3 detects
+    more leak days than the M2 detector'
+  baseline: thr_corr_persist
+  candidate: m3_full
+  metric: event_recall
+  direction: increase
+- id: P2
+  statement: 'Same dataset: M3 loses at most 5 points of leak-day recall vs raw M1'
+  baseline: thr_raw
+  candidate: m3_full
+  metric: event_recall
+  direction: no_decrease
+  margin: 0.05
+- id: P3
+  statement: 'Same dataset: M3 F1 above the M2 detector'
+  baseline: thr_corr_persist
+  candidate: m3_full
+  metric: f1
+  direction: increase
+- id: P4
+  statement: 'TRADE-OFF: M3 adds at most 3 points of days-with-false-alarm vs M2'
+  baseline: thr_corr_persist
+  candidate: m3_full
+  metric: day_false_alarm_rate
+  direction: no_increase
+  margin: 0.03
+evaluation:
+  bootstrap_samples: 1000
+  score_from_minute: 120
+improvement:
+  max_iterations: 10
+  max_evaluations: 40
+  min_delta: 0.002
+  max_fpr: 0.01
+  fpr_penalty: 10.0
+  max_day_fa_rate: 0.05
+  day_fa_penalty: 2.0

@@ -177,3 +177,88 @@ def write_confirmatory():
 
 if __name__ == "__main__":
     write_confirmatory()
+
+
+# ---------------------------------------------------------------------------
+# v2 CONFIRMATORY SUITE (fresh seeds 312-315). The v1 suite exposed a cold-start
+# weakness (C2: M3 recall 15.6 points below M1). v2 adds two opt-in fixes:
+# raw_k_uncertain (safe fallback while calibration is uncertain) and
+# meter_shift_requires_site_pressure. Hypotheses were written and committed
+# BEFORE these seeds were generated or run. v1 is kept as a candidate so the fix
+# itself is tested. R7 is reformulated to day-level recall (event-level recall
+# proved insensitive in v1 because multi-day leaks are eventually caught by all).
+# ---------------------------------------------------------------------------
+V2_PARAMS = {"raw_k_uncertain": 3.0, "meter_shift_requires_site_pressure": True}
+M3_V1 = {**CANDIDATES[-1], "id": "m3_v1", "description": "Milestone 3 v1 (first confirmatory version)"}
+M3_V2 = {**CANDIDATES[-1], "id": "m3_full",
+         "description": "Milestone 3 v2: all safeguards + uncertain-state fallback + site-pressure meter-shift rule",
+         "params": {**CANDIDATES[-1]["params"], **V2_PARAMS},
+         "search_space": {**CANDIDATES[-1]["search_space"], "raw_k_uncertain": [2.0, 3.0, 4.0]}}
+S_FALLBACK = cand("s_uncertain_fallback", "Safeguard alone: raw net with sensitive threshold while uncertain",
+                  "leak_safe", {**OFF, "raw_net": True, "window": 60, "k": 3.0, "persistence": 5,
+                                "raw_k_uncertain": 3.0}, {**CORE, **RAW, "raw_k_uncertain": [2.0, 3.0, 4.0]})
+CANDIDATES_V2 = CANDIDATES[:-1] + [S_FALLBACK, M3_V1, M3_V2]
+
+V2_REALISTIC = [
+    H("R1", "M3 v2 has higher F1 than M2", "m2_corr", "m3_full", "f1", "increase"),
+    H("R2", "M3 v2 detects more leak days than M2", "m2_corr", "m3_full", "event_recall", "increase"),
+    H("R3", "M3 v2 has higher F1 than M1", "m1_raw", "m3_full", "f1", "increase"),
+    H("R4", "M3 v2 detects leak events faster than M1", "m1_raw", "m3_full", "mean_event_delay", "decrease"),
+    H("R5", "TRADE-OFF: M3 v2 adds at most 0.05 false alarms per leak-free day vs M2",
+      "m2_corr", "m3_full", "false_alarms_per_clean_day", "no_increase", 0.05),
+    H("R6", "TRADE-OFF: M3 v2 adds at most 0.05 false alarms per leak-free day vs M1",
+      "m1_raw", "m3_full", "false_alarms_per_clean_day", "no_increase", 0.05),
+    H("R7", "Raw safety net alone detects more leak days than M2", "m2_corr", "s_raw_net", "event_recall", "increase"),
+    H("R8", "TRADE-OFF: the v2 fix adds at most 0.03 false alarms per leak-free day vs v1",
+      "m3_v1", "m3_full", "false_alarms_per_clean_day", "no_increase", 0.03),
+    H("R9", "The v2 fix loses at most 3 points of leak-day recall vs v1 on realistic data",
+      "m3_v1", "m3_full", "event_recall", "no_decrease", 0.03),
+]
+V2_MIDNIGHT = [h for h in MIDNIGHT_HYPS]
+V2_COLD = [
+    H("C1", "Cold start (every site leaking when observation starts): M3 v2 detects more leak days than M2",
+      "m2_corr", "m3_full", "event_recall", "increase"),
+    H("C2", "Cold start: M3 v2 loses at most 5 points of leak-day recall vs M1 raw", "m1_raw", "m3_full",
+      "event_recall", "no_decrease", 0.05),
+    H("C3", "Cold start: raw safety net alone detects more leak days than M2", "m2_corr", "s_raw_net",
+      "event_recall", "increase"),
+    H("C4", "Cold start: v2 detects more leak days than v1", "m3_v1", "m3_full", "event_recall", "increase"),
+    H("C5", "TRADE-OFF cold start: M3 v2 adds at most 0.05 false alarms per leak-free day vs M1",
+      "m1_raw", "m3_full", "false_alarms_per_clean_day", "no_increase", 0.05),
+]
+V2_SENSORS = [
+    H("S1", "Sensor stress: M3 v2 F1 above M2", "m2_corr", "m3_full", "f1", "increase"),
+    H("S2", "Sensor stress: M3 v2 F1 above M1", "m1_raw", "m3_full", "f1", "increase"),
+    H("S3", "TRADE-OFF sensor stress: M3 v2 adds at most 0.10 false alarms per leak-free day vs M1",
+      "m1_raw", "m3_full", "false_alarms_per_clean_day", "no_increase", 0.10),
+    H("S4", "TRADE-OFF sensor stress: M3 v2 adds at most 0.10 false alarms per leak-free day vs M2",
+      "m2_corr", "m3_full", "false_alarms_per_clean_day", "no_increase", 0.10),
+]
+
+
+def write_v2():
+    hdr = ("# GENESIS Milestone 3 v2 CONFIRMATORY run (SYNTHETIC). Fresh seed; hypotheses pre-registered\n"
+           "# in tools/make_m3_configs.py and committed before this config was ever run.\n")
+    runs = [("confirm", 312, "realistic multi-day sites", REALISTIC, V2_REALISTIC),
+            ("stress_midnight", 313, "leaks start 23:00-02:00",
+             {**REALISTIC, "leak_start_mode": "night", "leak_rate_per_day": 0.25}, V2_MIDNIGHT),
+            ("stress_coldstart", 314, "every site already leaking when observation starts",
+             {**REALISTIC, "preexisting_at_start_prob": 1.0}, V2_COLD),
+            ("stress_sensors", 315, "heavy dropouts, drift, meter swaps, delay changes",
+             {**REALISTIC, "dropout_prob_per_day": 0.3, "drift_std_per_day": 0.15,
+              "meter_step_prob_per_day": 0.08, "lag_change_prob_per_day": 0.15,
+              "demand_spike_probability": 0.5}, V2_SENSORS)]
+    for tag, seed, what, data, hyps in runs:
+        write(f"configs/water_leak_m3v2_{tag}.yaml", f"water_leak_m3v2_{tag}", seed,
+              f"v2 CONFIRMATORY ({what}), fresh seed {seed}.\n", data, hyps, CANDIDATES_V2, header=hdr)
+    # Replay of the Milestone 2 failure dataset with v2 (dataset seen before: a replay, not fresh).
+    rep = yaml.safe_load(open("configs/water_leak_m3_replay_m2_failure.yaml"))
+    rep["experiment"]["name"] = "water_leak_m3v2_replay_m2_failure"
+    rep["candidates"] = rep["candidates"][:2] + [{**M3_V1}, {**M3_V2}]
+    with open("configs/water_leak_m3v2_replay_m2_failure.yaml", "w") as f:
+        f.write("# GENESIS Milestone 3 v2 REPLAY of the Milestone 2 failure dataset (seed 45; seen before).\n"
+                + yaml.safe_dump(rep, sort_keys=False, width=100))
+
+
+if __name__ == "__main__":
+    write_v2()

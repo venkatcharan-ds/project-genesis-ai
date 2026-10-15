@@ -78,6 +78,16 @@ class LeakSafeDetector(Detector):
         "block_learning_after_alarm": True,
         "pressure_check": True,    # corroborate calibration shifts with line pressure
         "tau_pressure": 4.0,       # z threshold for a pressure drop / normal pressure
+        # --- v2 additions (opt-in; defaults keep v1 behaviour so recorded v1 runs reproduce) ---
+        # Safe fallback while the calibration state is uncertain: the site's first
+        # `provisional_days` (no confirmed history) and any day whose calibration was not
+        # accepted. The raw safety net then uses the more sensitive `raw_k_uncertain`
+        # (None = off).
+        "provisional_days": 3,
+        "raw_k_uncertain": None,
+        # Only call an abnormal calibration a METER_SHIFT when the site's OWN pressure history
+        # confirms it (the population prior is too broad on a cold start).
+        "meter_shift_requires_site_pressure": False,
     }
 
     # ------------------------------------------------------------------ helpers
@@ -134,6 +144,7 @@ class LeakSafeDetector(Detector):
         n, C = len(fin), min(p["calib_minutes"], len(fin))
         lag_c, b_c, miss = self._calibration(fin, fout)
         p_lvl = self._pressure_level(ep, fout) if p["pressure_check"] else float("nan")
+        uncertain_at_start = st["accepted_days"] < p["provisional_days"]
 
         trusted = p["carry_forward"] and st["bias"] is not None
         ref, sig, tau = ((st["bias"], self.shift_sigma_, p["tau_shift"]) if trusted
@@ -142,8 +153,8 @@ class LeakSafeDetector(Detector):
 
         # Pressure evidence (None when the check is off or the sensor is missing).
         zp = None
+        p_trusted = trusted and st["p_base"] is not None
         if p["pressure_check"] and not np.isnan(p_lvl):
-            p_trusted = trusted and st["p_base"] is not None
             p_ref, p_sig = ((st["p_base"], self.p_shift_sigma_) if p_trusted
                             else (self.p_prior_mu_, self.p_prior_sigma_))
             zp = (p_lvl - p_ref) / p_sig
@@ -160,8 +171,11 @@ class LeakSafeDetector(Detector):
         status = "OK"
         if np.isnan(b_c) or (p["robust_cal"] and miss > p["max_missing_frac"]):
             status = "LOW_QUALITY"
-        elif (abnormal_high or abnormal_low) and pressure_normal:
-            status = "METER_SHIFT"        # flow baseline moved but pressure did not: re-baseline
+        elif ((abnormal_high or abnormal_low) and pressure_normal
+              and (p_trusted or not p["meter_shift_requires_site_pressure"])):
+            # Flow baseline moved but this SITE's pressure did not: re-baseline. Needs the
+            # site's own pressure history; the population prior is too broad to confirm it.
+            status = "METER_SHIFT"
         elif abnormal_high or pressure_drop or (pressure_ambiguous and zp < 0 and z > tau / 2):
             status = "ABNORMAL_HIGH"      # leak-like (or unverifiable: pressure missing)
         elif abnormal_low:
@@ -203,6 +217,7 @@ class LeakSafeDetector(Detector):
         r[C:] = self._aligned(fin, fout, lag, st["tail"])[C:] - bias
         defined = np.ones(n, bool) if trusted else (np.arange(n) >= C)
 
+        st["accepted_days"] += int(accepted)
         if p["carry_forward"] and accepted:   # only trusted calibrations update the state
             st["bias"], st["lag"] = bias, lag
             if not np.isnan(p_lvl):
@@ -212,11 +227,14 @@ class LeakSafeDetector(Detector):
         return {"residual": r, "defined": defined, "status": status, "z": float(z), "b_cal": b_c,
                 "leak_like": leak_like, "z_pressure": None if zp is None else float(zp),
                 "bias_used": float(bias), "lag_used": int(lag), "accepted": accepted,
-                "valid": ~(np.isnan(fin) | np.isnan(fout))}
+                "valid": ~(np.isnan(fin) | np.isnan(fout)),
+                "uncertain_at_start": uncertain_at_start,
+                "uncertain_after": uncertain_at_start or not accepted}
 
     @staticmethod
     def _new_state() -> dict[str, Any]:
         return {"bias": None, "lag": None, "tail": None, "suspect_streak": 0, "p_base": None,
+                "accepted_days": 0,
                 "alarm_at_midnight": False, "last_alarm": False}
 
     @staticmethod
@@ -314,9 +332,14 @@ class LeakSafeDetector(Detector):
             raw = np.zeros(n, bool)
             if p["raw_net"]:
                 fin, fout = self._signals(ep)
-                rs = self._smooth(fin - fout, p["raw_window"])
-                raw = require_persistence(np.nan_to_num(rs, nan=-np.inf)
-                                          > self.raw_mu_ + p["raw_k"] * self.raw_sigma_, p["persistence"])
+                rs = np.nan_to_num(self._smooth(fin - fout, p["raw_window"]), nan=-np.inf)
+                # Uncertain calibration state -> the more sensitive raw threshold (safe fallback).
+                k_raw = np.full(n, float(p["raw_k"]))
+                if p["raw_k_uncertain"] is not None:
+                    k_raw[:C] = p["raw_k_uncertain"] if d["uncertain_at_start"] else p["raw_k"]
+                    k_raw[C:] = p["raw_k_uncertain"] if d["uncertain_after"] else p["raw_k"]
+                    k_raw = np.minimum(k_raw, p["raw_k"])     # fallback can only be more sensitive
+                raw = require_persistence(rs > self.raw_mu_ + k_raw * self.raw_sigma_, p["persistence"])
 
             cal = np.zeros(n, bool)
             if p["cal_alarm"] and d["leak_like"]:
