@@ -69,3 +69,111 @@ if __name__ == "__main__":
           "safeguards. Confirmatory conclusions come only from fresh-seed runs.\n",
           REALISTIC,
           header="# GENESIS Milestone 3 DEVELOPMENT run (SYNTHETIC). Not used for confirmatory claims.\n")
+
+
+# ---------------------------------------------------------------------------
+# CONFIRMATORY SUITE. Hypotheses below were written and committed BEFORE any of
+# these fresh seeds (302-305) were generated or run. Seed 45 replays the exact
+# Milestone 2 failure dataset.
+# ---------------------------------------------------------------------------
+def H(i, st, a, b, m, d, margin=None):
+    h = {"id": i, "statement": st, "baseline": a, "candidate": b, "metric": m, "direction": d}
+    if margin is not None:
+        h["margin"] = margin
+    return h
+
+
+CONFIRM_HYPS = [
+    H("R1", "Full M3 detects more leak events than M2", "m2_corr", "m3_full", "leak_event_recall", "increase"),
+    H("R2", "Full M3 has higher timestep F1 than M2", "m2_corr", "m3_full", "f1", "increase"),
+    H("R3", "Full M3 has higher timestep F1 than M1", "m1_raw", "m3_full", "f1", "increase"),
+    H("R4", "Full M3 detects leak events faster than M1", "m1_raw", "m3_full", "mean_event_delay", "decrease"),
+    H("R5", "TRADE-OFF: M3 adds at most 0.05 false alarms per leak-free day vs M2",
+      "m2_corr", "m3_full", "false_alarms_per_clean_day", "no_increase", 0.05),
+    H("R6", "TRADE-OFF: M3 adds at most 0.05 false alarms per leak-free day vs M1",
+      "m1_raw", "m3_full", "false_alarms_per_clean_day", "no_increase", 0.05),
+    H("R7", "Raw safety net alone catches leak events that M2 recalibration misses",
+      "m2_corr", "s_raw_net", "leak_event_recall", "increase"),
+    H("R8", "Carry-forward alone detects more leak events than M2", "m2_corr", "s_carry_forward",
+      "leak_event_recall", "increase"),
+    H("R9", "Full M3 beats the raw safety net alone on F1", "s_raw_net", "m3_full", "f1", "increase"),
+]
+
+MIDNIGHT_HYPS = [
+    H("N1", "Leaks active at midnight / starting during calibration: M3 detects more leak days than M2",
+      "m2_corr", "m3_full", "event_recall", "increase"),
+    H("N2", "Same scenario: M3 detects more leak events than M2", "m2_corr", "m3_full", "leak_event_recall", "increase"),
+    H("N3", "Same scenario: raw safety net alone detects more leak days than M2", "m2_corr", "s_raw_net",
+      "event_recall", "increase"),
+    H("N4", "TRADE-OFF: M3 adds at most 0.05 false alarms per leak-free day vs M2",
+      "m2_corr", "m3_full", "false_alarms_per_clean_day", "no_increase", 0.05),
+]
+
+COLD_HYPS = [
+    H("C1", "Every site already leaking when observation starts (no clean history): M3 detects more "
+      "leak days than M2", "m2_corr", "m3_full", "event_recall", "increase"),
+    H("C2", "Same scenario: M3 loses at most 5 points of leak-day recall vs M1 raw", "m1_raw", "m3_full",
+      "event_recall", "no_decrease", 0.05),
+    H("C3", "Same scenario: raw safety net alone detects more leak days than M2", "m2_corr", "s_raw_net",
+      "event_recall", "increase"),
+]
+
+SENSOR_HYPS = [
+    H("S1", "Heavy sensor stress (dropouts, drift, meter swaps, delay changes): M3 F1 above M2",
+      "m2_corr", "m3_full", "f1", "increase"),
+    H("S2", "TRADE-OFF under sensor stress: M3 adds at most 0.10 false alarms per leak-free day vs M1",
+      "m1_raw", "m3_full", "false_alarms_per_clean_day", "no_increase", 0.10),
+    H("S3", "TRADE-OFF under sensor stress: M3 adds at most 0.10 false alarms per leak-free day vs M2",
+      "m2_corr", "m3_full", "false_alarms_per_clean_day", "no_increase", 0.10),
+    H("S4", "Under sensor stress, missing-data handling alone has fewer false alarms per leak-free "
+      "day than M2", "m2_corr", "s_missing_hold", "false_alarms_per_clean_day", "decrease"),
+]
+
+REPLAY_HYPS = [
+    H("P1", "Exact Milestone 2 failure dataset (leaks running from minute 0, single days): M3 detects "
+      "more leak days than the M2 detector", "thr_corr_persist", "m3_full", "event_recall", "increase"),
+    H("P2", "Same dataset: M3 loses at most 5 points of leak-day recall vs raw M1", "thr_raw", "m3_full",
+      "event_recall", "no_decrease", 0.05),
+    H("P3", "Same dataset: M3 F1 above the M2 detector", "thr_corr_persist", "m3_full", "f1", "increase"),
+    H("P4", "TRADE-OFF: M3 adds at most 3 points of days-with-false-alarm vs M2", "thr_corr_persist",
+      "m3_full", "day_false_alarm_rate", "no_increase", 0.03),
+]
+
+
+def write_confirmatory():
+    hdr = ("# GENESIS Milestone 3 CONFIRMATORY run (SYNTHETIC). Fresh seed; hypotheses pre-registered\n"
+           "# in tools/make_m3_configs.py and committed before this config was ever run.\n")
+    write("configs/water_leak_m3_confirm.yaml", "water_leak_m3_confirm", 302,
+          "CONFIRMATORY: realistic multi-day sites. Does leak-safe calibration fix the Milestone 2\n"
+          "absorption failure without trading it for false alarms?\n", REALISTIC, CONFIRM_HYPS, header=hdr)
+    write("configs/water_leak_m3_stress_midnight.yaml", "water_leak_m3_stress_midnight", 303,
+          "STRESS (confirmatory): every leak starts between 23:00 and 02:00, so it is running at\n"
+          "midnight or starts inside the morning calibration window.\n",
+          {**REALISTIC, "leak_start_mode": "night", "leak_rate_per_day": 0.25}, MIDNIGHT_HYPS, header=hdr)
+    write("configs/water_leak_m3_stress_coldstart.yaml", "water_leak_m3_stress_coldstart", 304,
+          "STRESS (confirmatory): every site is already leaking when observation starts, so there\n"
+          "is no clean history to carry forward (hardest case for carry-forward).\n",
+          {**REALISTIC, "preexisting_at_start_prob": 1.0}, COLD_HYPS, header=hdr)
+    write("configs/water_leak_m3_stress_sensors.yaml", "water_leak_m3_stress_sensors", 305,
+          "STRESS (confirmatory): heavy sensor problems: dropouts, fast drift, frequent meter swaps\n"
+          "and delay changes, more demand spikes. Measures the false-alarm cost of the safeguards.\n",
+          {**REALISTIC, "dropout_prob_per_day": 0.3, "drift_std_per_day": 0.15,
+           "meter_step_prob_per_day": 0.08, "lag_change_prob_per_day": 0.15,
+           "demand_spike_probability": 0.5}, SENSOR_HYPS, header=hdr)
+
+    # Exact replay of the Milestone 2 failure (same data, seed, split, objective, scoring window).
+    m2 = yaml.safe_load(open("configs/water_leak_m2_stress_preexisting.yaml"))
+    keep = [c for c in m2["candidates"] if c["id"] in ("thr_raw", "thr_corr_persist")]
+    full = {**CANDIDATES[-1], "search_space": {k: v for k, v in CANDIDATES[-1]["search_space"].items()}}
+    cfg = {**m2, "experiment": {"name": "water_leak_m3_replay_m2_failure", "synthetic": True, "seed": 45},
+           "problem": {"statement": "REPLAY of the exact Milestone 2 failure dataset (seed 45, every leak running\n"
+                                    "from minute 0, independent single days, scored from minute 120). Same\n"
+                                    "baselines, objective and split as the Milestone 2 run, plus the M3 detector.\n",
+                       "success_criteria": m2["problem"]["success_criteria"]},
+           "candidates": keep + [full], "hypotheses": REPLAY_HYPS}
+    with open("configs/water_leak_m3_replay_m2_failure.yaml", "w") as f:
+        f.write(hdr + yaml.safe_dump(cfg, sort_keys=False, width=100))
+
+
+if __name__ == "__main__":
+    write_confirmatory()
