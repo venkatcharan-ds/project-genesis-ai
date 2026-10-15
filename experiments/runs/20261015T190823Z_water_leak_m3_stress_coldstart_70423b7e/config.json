@@ -1,0 +1,463 @@
+{
+  "experiment": {
+    "name": "water_leak_m3_stress_coldstart",
+    "synthetic": true,
+    "seed": 304
+  },
+  "problem": {
+    "statement": "STRESS (confirmatory): every site is already leaking when observation starts, so there\nis no clean history to carry forward (hardest case for carry-forward).\n",
+    "success_criteria": {
+      "max_timestep_fpr": 0.01,
+      "max_day_false_alarm_rate": 0.05
+    }
+  },
+  "data": {
+    "generator": "multi_day",
+    "n_sites": 80,
+    "days_per_site": 7,
+    "drift_std_per_day": 0.05,
+    "meter_step_prob_per_day": 0.02,
+    "lag_change_prob_per_day": 0.03,
+    "dropout_prob_per_day": 0.05,
+    "demand_spike_probability": 0.3,
+    "leak_rate_per_day": 0.12,
+    "leak_start_mode": "uniform",
+    "preexisting_at_start_prob": 1.0
+  },
+  "split": {
+    "train": 0.4,
+    "val": 0.2,
+    "test": 0.4
+  },
+  "candidates": [
+    {
+      "id": "m1_raw",
+      "name": "mass_balance_threshold",
+      "description": "Milestone 1: raw mass-balance threshold",
+      "params": {
+        "window": 60,
+        "k": 2.0
+      },
+      "search_space": {
+        "window": [
+          15,
+          30,
+          60,
+          120
+        ],
+        "k": [
+          2.0,
+          3.0,
+          4.0,
+          5.0,
+          6.0
+        ]
+      }
+    },
+    {
+      "id": "m2_corr",
+      "name": "mass_balance_threshold",
+      "description": "Milestone 2: daily recalibration + delay correction + persistence",
+      "params": {
+        "window": 60,
+        "k": 3.0,
+        "lag_comp": true,
+        "recalibrate": true,
+        "persistence": 5
+      },
+      "search_space": {
+        "window": [
+          15,
+          30,
+          60,
+          120
+        ],
+        "k": [
+          2.0,
+          3.0,
+          4.0,
+          5.0,
+          6.0
+        ],
+        "persistence": [
+          1,
+          5,
+          15
+        ]
+      }
+    },
+    {
+      "id": "s_carry_forward",
+      "name": "leak_safe",
+      "description": "Safeguard alone: trusted bias carried across days",
+      "params": {
+        "carry_forward": true,
+        "reject_abnormal": false,
+        "cal_alarm": false,
+        "raw_net": false,
+        "robust_cal": false,
+        "missing_hold": false,
+        "pressure_check": false,
+        "window": 60,
+        "k": 3.0,
+        "persistence": 5
+      },
+      "search_space": {
+        "window": [
+          15,
+          30,
+          60,
+          120
+        ],
+        "k": [
+          2.0,
+          3.0,
+          4.0,
+          5.0,
+          6.0
+        ],
+        "persistence": [
+          1,
+          5,
+          15
+        ]
+      }
+    },
+    {
+      "id": "s_reject_abnormal",
+      "name": "leak_safe",
+      "description": "Safeguard alone: reject abnormal calibration (fallback to prior)",
+      "params": {
+        "carry_forward": false,
+        "reject_abnormal": true,
+        "cal_alarm": false,
+        "raw_net": false,
+        "robust_cal": false,
+        "missing_hold": false,
+        "pressure_check": false,
+        "window": 60,
+        "k": 3.0,
+        "persistence": 5
+      },
+      "search_space": {
+        "window": [
+          15,
+          30,
+          60,
+          120
+        ],
+        "k": [
+          2.0,
+          3.0,
+          4.0,
+          5.0,
+          6.0
+        ],
+        "persistence": [
+          1,
+          5,
+          15
+        ],
+        "tau_prior": [
+          2.0,
+          3.0,
+          4.0
+        ]
+      }
+    },
+    {
+      "id": "s_cal_alarm",
+      "name": "leak_safe",
+      "description": "Safeguard alone: alarm on leak-like calibration",
+      "params": {
+        "carry_forward": false,
+        "reject_abnormal": false,
+        "cal_alarm": true,
+        "raw_net": false,
+        "robust_cal": false,
+        "missing_hold": false,
+        "pressure_check": false,
+        "window": 60,
+        "k": 3.0,
+        "persistence": 5
+      },
+      "search_space": {
+        "window": [
+          15,
+          30,
+          60,
+          120
+        ],
+        "k": [
+          2.0,
+          3.0,
+          4.0,
+          5.0,
+          6.0
+        ],
+        "persistence": [
+          1,
+          5,
+          15
+        ],
+        "tau_prior": [
+          2.0,
+          3.0,
+          4.0
+        ]
+      }
+    },
+    {
+      "id": "s_raw_net",
+      "name": "leak_safe",
+      "description": "Safeguard alone: independent raw-signal safety net",
+      "params": {
+        "carry_forward": false,
+        "reject_abnormal": false,
+        "cal_alarm": false,
+        "raw_net": true,
+        "robust_cal": false,
+        "missing_hold": false,
+        "pressure_check": false,
+        "window": 60,
+        "k": 3.0,
+        "persistence": 5
+      },
+      "search_space": {
+        "window": [
+          15,
+          30,
+          60,
+          120
+        ],
+        "k": [
+          2.0,
+          3.0,
+          4.0,
+          5.0,
+          6.0
+        ],
+        "persistence": [
+          1,
+          5,
+          15
+        ],
+        "raw_k": [
+          3.0,
+          4.0,
+          5.0,
+          6.0,
+          8.0
+        ]
+      }
+    },
+    {
+      "id": "s_robust_cal",
+      "name": "leak_safe",
+      "description": "Safeguard alone: median calibration + window quality check",
+      "params": {
+        "carry_forward": false,
+        "reject_abnormal": false,
+        "cal_alarm": false,
+        "raw_net": false,
+        "robust_cal": true,
+        "missing_hold": false,
+        "pressure_check": false,
+        "window": 60,
+        "k": 3.0,
+        "persistence": 5
+      },
+      "search_space": {
+        "window": [
+          15,
+          30,
+          60,
+          120
+        ],
+        "k": [
+          2.0,
+          3.0,
+          4.0,
+          5.0,
+          6.0
+        ],
+        "persistence": [
+          1,
+          5,
+          15
+        ]
+      }
+    },
+    {
+      "id": "s_missing_hold",
+      "name": "leak_safe",
+      "description": "Safeguard alone: NaN-aware evidence, hold alarm through gaps",
+      "params": {
+        "carry_forward": false,
+        "reject_abnormal": false,
+        "cal_alarm": false,
+        "raw_net": false,
+        "robust_cal": false,
+        "missing_hold": true,
+        "pressure_check": false,
+        "window": 60,
+        "k": 3.0,
+        "persistence": 5
+      },
+      "search_space": {
+        "window": [
+          15,
+          30,
+          60,
+          120
+        ],
+        "k": [
+          2.0,
+          3.0,
+          4.0,
+          5.0,
+          6.0
+        ],
+        "persistence": [
+          1,
+          5,
+          15
+        ]
+      }
+    },
+    {
+      "id": "s_pressure_check",
+      "name": "leak_safe",
+      "description": "Safeguard alone: pressure corroboration of calibration shifts",
+      "params": {
+        "carry_forward": false,
+        "reject_abnormal": false,
+        "cal_alarm": false,
+        "raw_net": false,
+        "robust_cal": false,
+        "missing_hold": false,
+        "pressure_check": true,
+        "window": 60,
+        "k": 3.0,
+        "persistence": 5
+      },
+      "search_space": {
+        "window": [
+          15,
+          30,
+          60,
+          120
+        ],
+        "k": [
+          2.0,
+          3.0,
+          4.0,
+          5.0,
+          6.0
+        ],
+        "persistence": [
+          1,
+          5,
+          15
+        ],
+        "tau_pressure": [
+          3.0,
+          4.0,
+          6.0
+        ]
+      }
+    },
+    {
+      "id": "m3_full",
+      "name": "leak_safe",
+      "description": "Milestone 3: all safeguards",
+      "params": {
+        "window": 60,
+        "k": 3.0,
+        "persistence": 5
+      },
+      "search_space": {
+        "window": [
+          15,
+          30,
+          60,
+          120
+        ],
+        "k": [
+          2.0,
+          3.0,
+          4.0,
+          5.0,
+          6.0
+        ],
+        "persistence": [
+          1,
+          5,
+          15
+        ],
+        "raw_k": [
+          3.0,
+          4.0,
+          5.0,
+          6.0,
+          8.0
+        ],
+        "tau_shift": [
+          3.0,
+          4.0,
+          6.0
+        ],
+        "tau_prior": [
+          2.0,
+          3.0,
+          4.0
+        ],
+        "tau_pressure": [
+          3.0,
+          4.0,
+          6.0
+        ]
+      }
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "C1",
+      "statement": "Every site already leaking when observation starts (no clean history): M3 detects more leak days than M2",
+      "baseline": "m2_corr",
+      "candidate": "m3_full",
+      "metric": "event_recall",
+      "direction": "increase"
+    },
+    {
+      "id": "C2",
+      "statement": "Same scenario: M3 loses at most 5 points of leak-day recall vs M1 raw",
+      "baseline": "m1_raw",
+      "candidate": "m3_full",
+      "metric": "event_recall",
+      "direction": "no_decrease",
+      "margin": 0.05
+    },
+    {
+      "id": "C3",
+      "statement": "Same scenario: raw safety net alone detects more leak days than M2",
+      "baseline": "m2_corr",
+      "candidate": "s_raw_net",
+      "metric": "event_recall",
+      "direction": "increase"
+    }
+  ],
+  "evaluation": {
+    "bootstrap_samples": 1000,
+    "score_from_minute": 0
+  },
+  "improvement": {
+    "max_iterations": 8,
+    "max_evaluations": 30,
+    "min_delta": 0.002,
+    "max_fpr": 0.01,
+    "fpr_penalty": 10.0,
+    "max_day_fa_rate": 0.05,
+    "day_fa_penalty": 2.0
+  }
+}
