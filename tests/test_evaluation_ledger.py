@@ -31,8 +31,9 @@ def test_objective_penalizes_fpr_over_budget():
 
 
 def test_bootstrap_ci_contains_point_estimate():
-    rows = [{"confusion": {"tp": tp, "fp": fp, "tn": 100, "fn": 10 - tp}} for tp, fp in
-            [(8, 1), (9, 0), (7, 2), (10, 1), (6, 0), (9, 3)]]
+    rows = [{"episode_id": i, "confusion": {"tp": tp, "fp": fp, "tn": 100, "fn": 10 - tp},
+             "leak_type": "burst", "detected": tp > 0, "any_false_alarm": fp > 0}
+            for i, (tp, fp) in enumerate([(8, 1), (9, 0), (7, 2), (10, 1), (6, 0), (9, 3)])]
     ci = bootstrap_ci(rows, n_boot=500, seed=0)
     lo, hi = ci["recall"]
     assert lo <= 49 / 60 <= hi

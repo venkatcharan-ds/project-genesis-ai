@@ -27,33 +27,59 @@ def render_report(cfg: dict[str, Any], s: dict[str, Any]) -> str:
     for name, d in s["data"].items():
         L.append(f"| {name} | {d['episodes']} | {d['samples']} | {d['leak_episodes']} | {d['positive_samples']} |")
 
+    s0 = s.get("score_from_minute", 0)
     L += ["", "Splits are by whole episode. Parameters were tuned on **val** only; **test** was "
-          "used once per configuration, after tuning finished.", "",
-          "## Held-out test results (tuned parameters)", "",
-          "| Detector | Precision | Recall | FPR | F1 | Event recall | Median delay (min) | "
-          "Episode false-alarm rate | Predict µs/sample | Fit s |",
-          "|---|---|---|---|---|---|---|---|---|---|"]
+          "used once per configuration, after tuning finished."]
+    if s0:
+        L += ["", f"**Scoring window:** every candidate is scored only on minutes ≥ {s0} of each day "
+              "(after the daily calibration window), so all candidates are compared on identical samples."]
+    if any(r.get("description") for r in s["results"].values()):
+        L += ["", "## Candidates", "", "| ID | Detector | What it tests |", "|---|---|---|"]
+        for cid, r in s["results"].items():
+            L.append(f"| {cid} | {r['detector']} | {r.get('description', '')} |")
+
+    L += ["", "## Held-out test results (tuned parameters)", "",
+          "| Candidate | Precision | Recall | FPR | F1 | Event recall | Median delay (min) | "
+          "Leak-free days w/ false alarm | All days w/ false alarm | Predict µs/sample | Fit s |",
+          "|---|---|---|---|---|---|---|---|---|---|---|"]
     for name in s["ranking_by_test_f1"]:
         t = s["results"][name]["test_tuned"]
         ts, ev, rt = t["timestep"], t["event"], t["runtime"]
         L.append(f"| {name} | {_f(ts['precision'])} | {_f(ts['recall'])} | {_f(ts['false_positive_rate'], 4)} | "
                  f"{_f(ts['f1'])} | {_f(ev['event_recall'])} | {_f(ev['median_detection_delay_min'], 0)} | "
-                 f"{_f(ev['episode_false_alarm_rate'])} | {_f(rt['predict_us_per_sample'], 2)} | "
-                 f"{_f(rt['fit_seconds'], 3)} |")
+                 f"{_f(ev['episode_false_alarm_rate'])} | {_f(ev.get('day_false_alarm_rate'))} | "
+                 f"{_f(rt['predict_us_per_sample'], 2)} | {_f(rt['fit_seconds'], 3)} |")
 
+    ci_keys = [k for k in ("f1", "false_positive_rate", "event_recall", "day_false_alarm_rate")
+               if k in next(iter(s["results"].values()))["test_tuned"]["timestep_ci95"]]
     L += ["", "Runtime is wall-clock on the machine that produced this run and will vary between machines.",
           "", "### 95% confidence intervals (episode-level bootstrap, test set)", "",
-          "| Detector | Precision | Recall | FPR | F1 |", "|---|---|---|---|---|"]
+          "| Candidate | " + " | ".join(ci_keys) + " |", "|---" * (len(ci_keys) + 1) + "|"]
     for name in s["ranking_by_test_f1"]:
         ci = s["results"][name]["test_tuned"]["timestep_ci95"]
-        L.append(f"| {name} | " + " | ".join(
-            f"[{_f(ci[k][0], 4 if k == 'false_positive_rate' else 3)}, "
-            f"{_f(ci[k][1], 4 if k == 'false_positive_rate' else 3)}]"
-            for k in ("precision", "recall", "false_positive_rate", "f1")) + " |")
+        nd = lambda k: 4 if k == "false_positive_rate" else 3  # noqa: E731
+        L.append(f"| {name} | " + " | ".join(f"[{_f(ci[k][0], nd(k))}, {_f(ci[k][1], nd(k))}]"
+                                             for k in ci_keys) + " |")
+    L += ["", "Overlapping marginal intervals do not settle a ranking. Pre-registered comparisons below "
+          "use a *paired* bootstrap on the same test days, which is more sensitive."]
 
-    L += ["", "Overlapping intervals mean the ranking between those detectors is not statistically settled.",
-          "", "## Did the improvement loop help? (test set, initial vs tuned)", "",
-          "| Detector | Initial params | Tuned params | Test F1 initial | Test F1 tuned | Iterations | Stop reason |",
+    if s.get("hypotheses"):
+        L += ["", "## Pre-registered hypotheses (verdicts on held-out test set)", "",
+              "Hypotheses were written to the evidence ledger before any tuning or testing. "
+              "Verdict rule: **supported** if the paired-bootstrap 95% CI of (candidate − baseline) lies "
+              "entirely on the predicted side; **contradicted** if entirely on the other side; "
+              "otherwise **inconclusive**.", "",
+              "| ID | Hypothesis | Baseline → candidate | Metric | Baseline | Candidate | Δ [95% CI] | Verdict |",
+              "|---|---|---|---|---|---|---|---|"]
+        for h in s["hypotheses"]:
+            lo, hi = h["ci95"]
+            margin = f" (margin {h['margin']})" if h.get("margin") else ""
+            L.append(f"| {h['id']} | {h['statement']} | {h['baseline']} → {h['candidate']} | "
+                     f"{h['metric']} ({h['direction']}{margin}) | {_f(h['a'])} | {_f(h['b'])} | "
+                     f"{_f(h['diff'])} [{_f(lo)}, {_f(hi)}] | **{h['verdict']}** |")
+
+    L += ["", "## Did the improvement loop help? (test set, initial vs tuned)", "",
+          "| Candidate | Initial params | Tuned params | Test F1 initial | Test F1 tuned | Iterations | Stop reason |",
           "|---|---|---|---|---|---|---|"]
     for name, r in s["results"].items():
         imp = r["improvement"]
@@ -61,24 +87,24 @@ def render_report(cfg: dict[str, Any], s: dict[str, Any]) -> str:
                  f"{_f(r['test_initial']['timestep']['f1'])} | {_f(r['test_tuned']['timestep']['f1'])} | "
                  f"{len(imp['history']) - 1} | {imp['stop_reason']} |")
 
-    L += ["", "## Failure analysis (test set, tuned parameters)", ""]
+    L += ["", "## Failure analysis (test set, tuned parameters)", "",
+          "| Candidate | Burst caught | Gradual caught | Missed leaks (peak L/min) | Leak-free days w/ FA "
+          "| FA rate w/ demand spike | FA rate w/o spike | Pre-leak FA days |",
+          "|---|---|---|---|---|---|---|---|"]
     for name, r in s["results"].items():
         fa = r["failure_analysis"]
         bt = fa["recall_by_leak_type"]
-        L += [f"### {name}", "",
-              f"- Event recall — burst: {bt['burst']['detected']}/{bt['burst']['n']}, "
-              f"gradual: {bt['gradual']['detected']}/{bt['gradual']['n']}",
-              f"- Missed leaks (peak rate reached in episode, L/min): "
-              f"{', '.join(f'{m['leak_type']} {m['leak_peak_rate']:.2f}' for m in fa['missed_events']) or 'none'}",
-              f"- Smallest detected leak (peak rate): {_f(fa['smallest_detected_leak_lpm'], 2)} L/min",
-              f"- Leak-free episodes with ≥1 false alarm: {fa['false_alarm_episodes']} "
-              f"(with demand spike: {_f(fa['false_alarm_rate_with_demand_spike'], 2)}, "
-              f"without: {_f(fa['false_alarm_rate_without_demand_spike'], 2)})",
-              f"- Leak episodes with a false alarm before the leak started: {fa['pre_leak_false_alarms']}"]
-        if fa["hypotheses_untested"]:
-            L += ["- Hypotheses for next iteration (**untested**):"]
-            L += [f"  - {h}" for h in fa["hypotheses_untested"]]
-        L.append("")
+        missed = ", ".join(f"{m['leak_type'][0]}{m['leak_peak_rate']:.2f}" for m in fa["missed_events"]) or "none"
+        L.append(f"| {name} | {bt['burst']['detected']}/{bt['burst']['n']} | "
+                 f"{bt['gradual']['detected']}/{bt['gradual']['n']} | {missed} | {fa['false_alarm_episodes']} | "
+                 f"{_f(fa['false_alarm_rate_with_demand_spike'], 2)} | "
+                 f"{_f(fa['false_alarm_rate_without_demand_spike'], 2)} | {fa['pre_leak_false_alarms']} |")
+    L += ["", "Missed-leak codes: `b` = burst, `g` = gradual, followed by peak leak rate reached in the episode.",
+          "", "### Auto-generated hypotheses for the next iteration (**untested**)", ""]
+    for name, r in s["results"].items():
+        hs = r["failure_analysis"]["hypotheses_untested"]
+        L.append(f"- **{name}:** " + (" ".join(hs) if hs else "none triggered."))
+    L.append("")
 
     L += ["## Limitations", "",
           "- Single-segment simulator with Gaussian noise; real networks have topology, sensor faults, "
@@ -89,5 +115,9 @@ def render_report(cfg: dict[str, Any], s: dict[str, Any]) -> str:
 
 
 def _short(p: dict[str, Any]) -> str:
+    """Compact params: hide fixed internals and shared options left at their defaults."""
+    from genesis.detectors.base import COMMON_PARAMS
+
     skip = {"n_estimators", "max_train_samples", "random_state"}
-    return ", ".join(f"{k}={v}" for k, v in p.items() if k not in skip)
+    return ", ".join(f"{k}={v}" for k, v in p.items()
+                     if k not in skip and not (k in COMMON_PARAMS and COMMON_PARAMS[k] == v))

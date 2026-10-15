@@ -18,13 +18,14 @@ class MassBalanceThreshold(Detector):
     default_params = {"window": 15, "k": 4.0}
 
     def fit(self, episodes: list[Episode]) -> "MassBalanceThreshold":
-        smoothed = [causal_moving_average(ep.residual, self.params["window"])[~ep.label] for ep in episodes]
+        smoothed = [causal_moving_average(self.residual(ep), self.params["window"])[self.fit_mask(ep)]
+                    for ep in episodes]
         normal = np.concatenate(smoothed)
         self.mu_ = float(normal.mean())
         self.sigma_ = float(normal.std()) or 1e-9
         self.fitted = True
         return self
 
-    def predict(self, episode: Episode) -> np.ndarray:
-        r = causal_moving_average(episode.residual, self.params["window"])
+    def raw_alarms(self, episode: Episode) -> np.ndarray:
+        r = causal_moving_average(self.residual(episode), self.params["window"])
         return r > self.mu_ + self.params["k"] * self.sigma_

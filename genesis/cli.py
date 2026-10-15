@@ -22,16 +22,28 @@ def main(argv: list[str] | None = None) -> int:
     ver = sub.add_parser("verify-ledger", help="check the evidence ledger hash chain")
     ver.add_argument("--ledger", default="experiments/ledger.jsonl")
 
+    rep = sub.add_parser("check-repro", help="re-run a recorded experiment and compare results")
+    rep.add_argument("run_dir")
+    rep.add_argument("--ledger", default="experiments/ledger.jsonl")
+
     args = parser.parse_args(argv)
     if args.command == "run":
         summary = run_experiment(load_config(args.config), args.out, args.ledger)
         print(f"run complete: {summary['run_dir']}")
         for name in summary["ranking_by_test_f1"]:
             ts = summary["results"][name]["test_tuned"]["timestep"]
-            print(f"  {name:<24} P={ts['precision'] or 0:.3f} R={ts['recall'] or 0:.3f} "
+            print(f"  {name:<30} P={ts['precision'] or 0:.3f} R={ts['recall'] or 0:.3f} "
                   f"FPR={ts['false_positive_rate'] or 0:.4f} F1={ts['f1']:.3f}")
         print("NOTE: synthetic data only — not physical-world validation.")
         return 0
+    if args.command == "check-repro":
+        from genesis.repro import check_run
+
+        ok, diffs, _ = check_run(args.run_dir, args.ledger)
+        print("REPRODUCED: all deterministic results match" if ok else "NOT REPRODUCED:")
+        for d in diffs:
+            print(f"  - {d}")
+        return 0 if ok else 1
     if args.command == "verify-ledger":
         ok, msg = EvidenceLedger(args.ledger).verify()
         print(msg)

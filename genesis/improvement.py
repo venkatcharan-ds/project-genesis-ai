@@ -40,6 +40,9 @@ def improve(
     min_delta: float,
     max_fpr: float,
     fpr_penalty: float,
+    max_day_fa_rate: float = 1.0,
+    day_fa_penalty: float = 0.0,
+    score_from: int = 0,
     log: Callable[[dict[str, Any]], None] = lambda _: None,
 ) -> dict[str, Any]:
     cache: dict[tuple, dict[str, Any]] = {}
@@ -51,8 +54,9 @@ def improve(
             t0 = time.perf_counter()
             det.fit(train)
             fit_s = time.perf_counter() - t0
-            m = evaluate(det, val)
-            cache[key] = {"params": params, "objective": objective(m, max_fpr, fpr_penalty),
+            m = evaluate(det, val, score_from=score_from)
+            obj = objective(m, max_fpr, fpr_penalty, max_day_fa_rate, day_fa_penalty)
+            cache[key] = {"params": params, "objective": obj,
                           "val_timestep": m["timestep"], "val_event": m["event"], "fit_seconds": fit_s}
         return cache[key]
 

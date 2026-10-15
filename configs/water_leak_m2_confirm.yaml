@@ -1,0 +1,209 @@
+# GENESIS Milestone 2 CONFIRMATORY experiment (SYNTHETIC, fresh seed).
+# Hypotheses formed from the seed-42 exploratory run, tested on unseen data.
+experiment:
+  name: water_leak_m2_confirm
+  synthetic: true
+  seed: 44
+problem:
+  statement: 'CONFIRMATORY run on a FRESH synthetic dataset (seed 44, never used before).
+
+    The exploratory run (seed 42) showed that tuning converts the corrections'' noise
+
+    reduction into sensitivity rather than fewer alarms. Hypotheses were reformulated
+
+    accordingly: compare detectors at a matched false-alarm budget (tuning objective) and
+
+    ask whether corrections buy recall, F1 and speed without paying in false alarms.
+
+    '
+  success_criteria:
+    max_timestep_fpr: 0.01
+    max_day_false_alarm_rate: 0.05
+data:
+  n_episodes: 400
+  episode_minutes: 1440
+  leak_probability: 0.5
+  meter_bias_std: 0.5
+  demand_spike_probability: 0.3
+split:
+  train: 0.5
+  val: 0.25
+  test: 0.25
+candidates:
+- id: thr_raw
+  name: mass_balance_threshold
+  description: 'M1 baseline: raw residual'
+  params:
+    window: 60
+    k: 2.0
+  search_space: &id001
+    window:
+    - 5
+    - 10
+    - 15
+    - 30
+    - 60
+    - 120
+    k:
+    - 1.5
+    - 2.0
+    - 3.0
+    - 4.0
+    - 5.0
+    - 6.0
+    - 8.0
+- id: thr_corr
+  name: mass_balance_threshold
+  description: Delay correction + daily recalibration
+  params:
+    window: 60
+    k: 2.0
+    lag_comp: true
+    recalibrate: true
+  search_space: *id001
+- id: cusum_raw
+  name: cusum
+  description: 'M1 baseline: raw residual'
+  params:
+    drift: 1.0
+    h: 5.0
+  search_space: &id002
+    drift:
+    - 0.1
+    - 0.25
+    - 0.5
+    - 1.0
+    - 1.5
+    - 2.0
+    h:
+    - 2.5
+    - 5.0
+    - 10.0
+    - 20.0
+    - 40.0
+    - 80.0
+    - 160.0
+- id: cusum_corr
+  name: cusum
+  description: Delay correction + daily recalibration
+  params:
+    drift: 1.0
+    h: 5.0
+    lag_comp: true
+    recalibrate: true
+  search_space: *id002
+- id: if_raw
+  name: isolation_forest
+  description: 'M1 baseline: raw residual'
+  params:
+    window: 30
+    threshold_quantile: 0.01
+  search_space: &id003
+    window:
+    - 5
+    - 15
+    - 30
+    - 60
+    - 120
+    threshold_quantile:
+    - 0.001
+    - 0.003
+    - 0.01
+    - 0.03
+    - 0.1
+- id: if_corr
+  name: isolation_forest
+  description: Delay correction + daily recalibration
+  params:
+    window: 30
+    threshold_quantile: 0.01
+    lag_comp: true
+    recalibrate: true
+  search_space: *id003
+hypotheses:
+- id: C-thr-f1
+  statement: At a matched false-alarm budget, corrections increase F1 (threshold)
+  baseline: thr_raw
+  candidate: thr_corr
+  metric: f1
+  direction: increase
+- id: C-thr-recall
+  statement: At a matched false-alarm budget, corrections increase leak-event recall (threshold)
+  baseline: thr_raw
+  candidate: thr_corr
+  metric: event_recall
+  direction: increase
+- id: C-thr-delay
+  statement: At a matched false-alarm budget, corrections reduce mean detection delay (threshold)
+  baseline: thr_raw
+  candidate: thr_corr
+  metric: mean_detection_delay
+  direction: decrease
+- id: C-thr-fa
+  statement: Those gains do not cost more than 3 points of days-with-false-alarm (threshold)
+  baseline: thr_raw
+  candidate: thr_corr
+  metric: day_false_alarm_rate
+  direction: no_increase
+  margin: 0.03
+- id: C-cusum-f1
+  statement: At a matched false-alarm budget, corrections increase F1 (CUSUM)
+  baseline: cusum_raw
+  candidate: cusum_corr
+  metric: f1
+  direction: increase
+- id: C-cusum-recall
+  statement: At a matched false-alarm budget, corrections increase leak-event recall (CUSUM)
+  baseline: cusum_raw
+  candidate: cusum_corr
+  metric: event_recall
+  direction: increase
+- id: C-cusum-delay
+  statement: At a matched false-alarm budget, corrections reduce mean detection delay (CUSUM)
+  baseline: cusum_raw
+  candidate: cusum_corr
+  metric: mean_detection_delay
+  direction: decrease
+- id: C-cusum-fa
+  statement: Those gains do not cost more than 3 points of days-with-false-alarm (CUSUM)
+  baseline: cusum_raw
+  candidate: cusum_corr
+  metric: day_false_alarm_rate
+  direction: no_increase
+  margin: 0.03
+- id: C-if-f1
+  statement: At a matched false-alarm budget, corrections increase F1 (Isolation Forest)
+  baseline: if_raw
+  candidate: if_corr
+  metric: f1
+  direction: increase
+- id: C-if-recall
+  statement: At a matched false-alarm budget, corrections increase leak-event recall (Isolation Forest)
+  baseline: if_raw
+  candidate: if_corr
+  metric: event_recall
+  direction: increase
+- id: C-if-delay
+  statement: At a matched false-alarm budget, corrections reduce mean detection delay (Isolation Forest)
+  baseline: if_raw
+  candidate: if_corr
+  metric: mean_detection_delay
+  direction: decrease
+- id: C-if-fa
+  statement: Those gains do not cost more than 3 points of days-with-false-alarm (Isolation Forest)
+  baseline: if_raw
+  candidate: if_corr
+  metric: day_false_alarm_rate
+  direction: no_increase
+  margin: 0.03
+evaluation:
+  bootstrap_samples: 1000
+  score_from_minute: 120
+improvement:
+  max_iterations: 10
+  max_evaluations: 40
+  min_delta: 0.002
+  max_fpr: 0.01
+  fpr_penalty: 10.0
+  max_day_fa_rate: 0.05
+  day_fa_penalty: 2.0

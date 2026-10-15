@@ -18,14 +18,14 @@ class CusumDetector(Detector):
     default_params = {"drift": 0.5, "h": 20.0}
 
     def fit(self, episodes: list[Episode]) -> "CusumDetector":
-        normal = np.concatenate([ep.residual[~ep.label] for ep in episodes])
+        normal = np.concatenate([self.residual(ep)[self.fit_mask(ep)] for ep in episodes])
         self.mu_ = float(normal.mean())
         self.sigma_ = float(normal.std()) or 1e-9
         self.fitted = True
         return self
 
-    def predict(self, episode: Episode) -> np.ndarray:
-        z = (episode.residual - self.mu_) / self.sigma_
+    def raw_alarms(self, episode: Episode) -> np.ndarray:
+        z = (self.residual(episode) - self.mu_) / self.sigma_
         drift, h = self.params["drift"], self.params["h"]
         s = 0.0
         alarm = np.zeros(len(z), dtype=bool)
