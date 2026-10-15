@@ -97,7 +97,9 @@ def run_experiment(cfg: dict[str, Any], out_root: str | Path, ledger_path: str |
     score_from = int(cfg["evaluation"].get("score_from_minute", 0))
     objective_cfg = {"max_fpr": imp["max_fpr"], "fpr_penalty": imp["fpr_penalty"],
                      "max_day_fa_rate": imp.get("max_day_fa_rate", 1.0),
-                     "day_fa_penalty": imp.get("day_fa_penalty", 0.0)}
+                     "day_fa_penalty": imp.get("day_fa_penalty", 0.0),
+                     "max_fa_per_clean_day": imp.get("max_fa_per_clean_day", float("inf")),
+                     "fa_count_penalty": imp.get("fa_count_penalty", 0.0)}
     results: dict[str, Any] = {}
     for cand, cid in zip(cfg["candidates"], cand_ids):
         name = cand["name"]

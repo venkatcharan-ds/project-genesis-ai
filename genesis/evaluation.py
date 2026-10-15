@@ -286,7 +286,8 @@ def paired_bootstrap_diff(rows_a: list[dict[str, Any]], rows_b: list[dict[str, A
 
 
 def objective(metrics: dict[str, Any], max_fpr: float, fpr_penalty: float,
-              max_day_fa_rate: float = 1.0, day_fa_penalty: float = 0.0) -> float:
+              max_day_fa_rate: float = 1.0, day_fa_penalty: float = 0.0,
+              max_fa_per_clean_day: float = float("inf"), fa_count_penalty: float = 0.0) -> float:
     """Score used by the improvement loop.
 
     F1, penalized when timestep FPR exceeds its budget and (Milestone 2) when
@@ -296,5 +297,10 @@ def objective(metrics: dict[str, Any], max_fpr: float, fpr_penalty: float,
     f1 = metrics["timestep"]["f1"] or 0.0
     fpr = metrics["timestep"]["false_positive_rate"] or 0.0
     day_fa = (metrics.get("event") or {}).get("day_false_alarm_rate") or 0.0
+    # Milestone 3: penalize the NUMBER of distinct false alarms per leak-free day. Without
+    # it, a configuration whose alarm flaps on/off many times a day costs nothing extra.
+    fa_count = (metrics.get("event") or {}).get("false_alarms_per_clean_day") or 0.0
+    over = max(0.0, fa_count - max_fa_per_clean_day) if fa_count_penalty else 0.0
     return (f1 - fpr_penalty * max(0.0, fpr - max_fpr)
-            - day_fa_penalty * max(0.0, day_fa - max_day_fa_rate))
+            - day_fa_penalty * max(0.0, day_fa - max_day_fa_rate)
+            - fa_count_penalty * over)

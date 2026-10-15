@@ -262,3 +262,49 @@ def write_v2():
 
 if __name__ == "__main__":
     write_v2()
+
+
+# ---------------------------------------------------------------------------
+# v3 CONFIRMATORY SUITE (fresh seeds 322-325). Same detector code as v2. The v2
+# suite showed (R8 contradicted) that the tuning objective never counted the
+# NUMBER of false alarms, so the tuner picked flapping configurations, and the
+# 30-evaluation budget ran out. v3 adds an alarm-count penalty to the objective
+# (max 0.05 false alarms per leak-free day) and doubles the budget. ALL candidates,
+# including M1 and M2, are re-tuned with it. Hypotheses committed before running.
+# ---------------------------------------------------------------------------
+IMPROVE_V3 = {**IMPROVE, "max_evaluations": 60, "max_fa_per_clean_day": 0.05, "fa_count_penalty": 1.0}
+
+
+def write_v3():
+    hdr = ("# GENESIS Milestone 3 v3 CONFIRMATORY run (SYNTHETIC). Fresh seed; hypotheses pre-registered\n"
+           "# in tools/make_m3_configs.py and committed before this config was ever run.\n")
+    runs = [("confirm", 322, "realistic multi-day sites", REALISTIC, V2_REALISTIC),
+            ("stress_midnight", 323, "leaks start 23:00-02:00",
+             {**REALISTIC, "leak_start_mode": "night", "leak_rate_per_day": 0.25}, V2_MIDNIGHT),
+            ("stress_coldstart", 324, "every site already leaking when observation starts",
+             {**REALISTIC, "preexisting_at_start_prob": 1.0}, V2_COLD),
+            ("stress_sensors", 325, "heavy dropouts, drift, meter swaps, delay changes",
+             {**REALISTIC, "dropout_prob_per_day": 0.3, "drift_std_per_day": 0.15,
+              "meter_step_prob_per_day": 0.08, "lag_change_prob_per_day": 0.15,
+              "demand_spike_probability": 0.5}, V2_SENSORS)]
+    for tag, seed, what, data, hyps in runs:
+        cfg = {"experiment": {"name": f"water_leak_m3v3_{tag}", "synthetic": True, "seed": seed},
+               "problem": {"statement": f"v3 CONFIRMATORY ({what}), fresh seed {seed}. Objective now penalizes\n"
+                                        "the number of false alarms per leak-free day.\n",
+                           "success_criteria": {"max_timestep_fpr": 0.01, "max_day_false_alarm_rate": 0.05,
+                                                "max_false_alarms_per_clean_day": 0.05}},
+               "data": data, "split": SPLIT, "candidates": CANDIDATES_V2, "hypotheses": hyps,
+               "evaluation": EVAL, "improvement": IMPROVE_V3}
+        with open(f"configs/water_leak_m3v3_{tag}.yaml", "w") as f:
+            f.write(hdr + yaml.safe_dump(cfg, sort_keys=False, width=100))
+    rep = yaml.safe_load(open("configs/water_leak_m3v2_replay_m2_failure.yaml"))
+    rep["experiment"]["name"] = "water_leak_m3v3_replay_m2_failure"
+    rep["improvement"] = {**rep["improvement"], "max_evaluations": 60, "max_fa_per_clean_day": 0.05,
+                          "fa_count_penalty": 1.0}
+    with open("configs/water_leak_m3v3_replay_m2_failure.yaml", "w") as f:
+        f.write("# GENESIS Milestone 3 v3 REPLAY of the Milestone 2 failure dataset (seed 45; seen before).\n"
+                + yaml.safe_dump(rep, sort_keys=False, width=100))
+
+
+if __name__ == "__main__":
+    write_v3()

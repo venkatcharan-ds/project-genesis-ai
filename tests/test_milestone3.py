@@ -282,3 +282,16 @@ def test_v2_meter_swap_still_rebaselined_with_site_history(train_sites):
     preds = det.predict_sequence(days)
     assert det.components_[days[2].episode_id]["status"] == "METER_SHIFT"
     assert preds[3].sum() == 0 and preds[4].sum() == 0
+
+
+def test_objective_counts_false_alarms_per_clean_day():
+    """Regression for the v2 finding: a flapping configuration must not score as well as
+    a quiet one with the same F1 once the alarm-count penalty is on."""
+    from genesis.evaluation import objective
+    quiet = {"timestep": {"f1": 0.9, "false_positive_rate": 0.0},
+             "event": {"day_false_alarm_rate": 0.02, "false_alarms_per_clean_day": 0.02}}
+    flappy = {"timestep": {"f1": 0.9, "false_positive_rate": 0.0},
+              "event": {"day_false_alarm_rate": 0.02, "false_alarms_per_clean_day": 0.7}}
+    assert objective(quiet, 0.01, 10.0) == objective(flappy, 0.01, 10.0)          # old objective: blind
+    assert objective(flappy, 0.01, 10.0, max_fa_per_clean_day=0.05, fa_count_penalty=1.0) < \
+        objective(quiet, 0.01, 10.0, max_fa_per_clean_day=0.05, fa_count_penalty=1.0)
