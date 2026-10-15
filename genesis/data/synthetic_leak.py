@@ -41,6 +41,9 @@ class GeneratorConfig:
     gradual_ramp_minutes: tuple[int, int] = (120, 480)
     burst_share: float = 0.5            # P(burst | leak)
     warmup_minutes: int = 120           # leaks never start before this
+    # Share of leaks already running at minute 0 (e.g. started overnight). Stress-test
+    # knob for daily recalibration; 0 keeps the random stream identical to Milestone 1.
+    preexisting_leak_share: float = 0.0
     demand_spike_probability: float = 0.3
     demand_spike_fraction: tuple[float, float] = (0.15, 0.4)
     demand_spike_minutes: tuple[int, int] = (10, 60)
@@ -98,7 +101,8 @@ def generate_episode(cfg: GeneratorConfig, episode_id: int, rng: np.random.Gener
 
     leak = np.zeros(n)
     if rng.random() < cfg.leak_probability:
-        start = int(rng.integers(cfg.warmup_minutes, n - 60))
+        preexisting = cfg.preexisting_leak_share > 0 and rng.random() < cfg.preexisting_leak_share
+        start = 0 if preexisting else int(rng.integers(cfg.warmup_minutes, n - 60))
         if rng.random() < cfg.burst_share:
             rate = float(rng.uniform(*cfg.burst_fraction)) * cfg.base_demand
             leak[start:] = rate
@@ -112,7 +116,7 @@ def generate_episode(cfg: GeneratorConfig, episode_id: int, rng: np.random.Gener
         # Peak rate actually reached inside the episode: a late-starting gradual leak
         # may never reach its final rate, so judge detectability on this value.
         meta.update(has_leak=True, leak_type=kind, leak_start=start, leak_final_rate=rate,
-                    leak_peak_rate=float(leak.max()))
+                    leak_peak_rate=float(leak.max()), preexisting_leak=bool(preexisting))
 
     lag = int(rng.integers(0, cfg.max_lag_minutes + 1))
     demand_lagged = np.concatenate([np.full(lag, demand[0]), demand[: n - lag]]) if lag else demand

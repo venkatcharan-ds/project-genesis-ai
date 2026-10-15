@@ -1,0 +1,172 @@
+# GENESIS Milestone 2 SHARP STRESS TEST (SYNTHETIC): leaks present from minute 0.
+# Hypotheses here are PREDICTED FAILURES of daily recalibration.
+experiment:
+  name: water_leak_m2_stress_preexisting
+  synthetic: true
+  seed: 45
+problem:
+  statement: 'SHARP STRESS TEST of the daily-recalibration assumption. Every leak is already
+
+    running at minute 0 (as if it started overnight), so it is fully inside the
+
+    calibration window. Prediction registered BEFORE running: corrected detectors will
+
+    absorb these leaks into their baseline and lose leak-event recall versus raw detectors.
+
+    '
+  success_criteria:
+    max_timestep_fpr: 0.01
+    max_day_false_alarm_rate: 0.05
+data:
+  n_episodes: 400
+  episode_minutes: 1440
+  leak_probability: 0.5
+  meter_bias_std: 0.5
+  demand_spike_probability: 0.3
+  warmup_minutes: 120
+  preexisting_leak_share: 1.0
+split:
+  train: 0.5
+  val: 0.25
+  test: 0.25
+candidates:
+- id: thr_raw
+  name: mass_balance_threshold
+  description: 'M1 baseline: raw residual'
+  params:
+    window: 60
+    k: 2.0
+  search_space:
+    window: &id001
+    - 5
+    - 10
+    - 15
+    - 30
+    - 60
+    - 120
+    k: &id002
+    - 1.5
+    - 2.0
+    - 3.0
+    - 4.0
+    - 5.0
+    - 6.0
+    - 8.0
+- id: thr_corr_persist
+  name: mass_balance_threshold
+  description: Corrections + alarm persistence
+  params:
+    window: 60
+    k: 2.0
+    lag_comp: true
+    recalibrate: true
+    persistence: 5
+  search_space:
+    window: *id001
+    k: *id002
+    persistence: &id005
+    - 1
+    - 3
+    - 5
+    - 10
+    - 15
+    - 30
+- id: cusum_raw
+  name: cusum
+  description: 'M1 baseline: raw residual'
+  params:
+    drift: 1.0
+    h: 5.0
+  search_space:
+    drift: &id003
+    - 0.1
+    - 0.25
+    - 0.5
+    - 1.0
+    - 1.5
+    - 2.0
+    h: &id004
+    - 2.5
+    - 5.0
+    - 10.0
+    - 20.0
+    - 40.0
+    - 80.0
+    - 160.0
+- id: cusum_corr_persist
+  name: cusum
+  description: Corrections + alarm persistence
+  params:
+    drift: 1.0
+    h: 5.0
+    lag_comp: true
+    recalibrate: true
+    persistence: 5
+  search_space:
+    drift: *id003
+    h: *id004
+    persistence: *id005
+- id: if_raw
+  name: isolation_forest
+  description: 'M1 baseline: raw residual'
+  params:
+    window: 30
+    threshold_quantile: 0.01
+  search_space:
+    window: &id006
+    - 5
+    - 15
+    - 30
+    - 60
+    - 120
+    threshold_quantile: &id007
+    - 0.001
+    - 0.003
+    - 0.01
+    - 0.03
+    - 0.1
+- id: if_corr_persist
+  name: isolation_forest
+  description: Corrections + alarm persistence
+  params:
+    window: 30
+    threshold_quantile: 0.01
+    lag_comp: true
+    recalibrate: true
+    persistence: 5
+  search_space:
+    window: *id006
+    threshold_quantile: *id007
+    persistence: *id005
+hypotheses:
+- id: P1
+  statement: 'PREDICTED FAILURE: corrected+persistent threshold detects fewer pre-existing leaks than
+    raw'
+  baseline: thr_raw
+  candidate: thr_corr_persist
+  metric: event_recall
+  direction: decrease
+- id: P2
+  statement: 'PREDICTED FAILURE: corrected+persistent CUSUM detects fewer pre-existing leaks than raw'
+  baseline: cusum_raw
+  candidate: cusum_corr_persist
+  metric: event_recall
+  direction: decrease
+- id: P3
+  statement: 'PREDICTED FAILURE: corrected+persistent Isolation Forest detects fewer pre-existing leaks
+    than raw'
+  baseline: if_raw
+  candidate: if_corr_persist
+  metric: event_recall
+  direction: decrease
+evaluation:
+  bootstrap_samples: 1000
+  score_from_minute: 120
+improvement:
+  max_iterations: 10
+  max_evaluations: 40
+  min_delta: 0.002
+  max_fpr: 0.01
+  fpr_penalty: 10.0
+  max_day_fa_rate: 0.05
+  day_fa_penalty: 2.0

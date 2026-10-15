@@ -49,3 +49,12 @@ def test_peak_rate_reflects_leak_actually_present():
         assert ep.meta["leak_peak_rate"] == pytest.approx(ep.leak_rate.max())
         assert ep.meta["leak_peak_rate"] <= ep.meta["leak_final_rate"] + 1e-9
     assert any(ep.meta["leak_peak_rate"] < ep.meta["leak_final_rate"] for ep in eps)
+
+
+def test_preexisting_leaks_start_at_zero_and_default_stream_unchanged():
+    base = GeneratorConfig(n_episodes=30)
+    # The new knob, when off, must not consume random numbers (keeps old datasets identical).
+    assert dataset_fingerprint(generate_dataset(base, 9)) == dataset_fingerprint(
+        generate_dataset(GeneratorConfig(n_episodes=30, preexisting_leak_share=0.0), 9))
+    eps = generate_dataset(GeneratorConfig(n_episodes=40, leak_probability=1.0, preexisting_leak_share=1.0), 9)
+    assert all(e.meta["leak_start"] == 0 and e.meta["preexisting_leak"] and e.label[0] for e in eps)
