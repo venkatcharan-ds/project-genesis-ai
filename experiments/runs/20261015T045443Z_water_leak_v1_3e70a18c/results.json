@@ -1,0 +1,6333 @@
+{
+  "run_id": "20261015T045443Z_water_leak_v1_3e70a18c",
+  "synthetic": true,
+  "config_hash": "3e70a18c0a080dd114c9bced20649e78b18c7f1411e9f34160ee928485118389",
+  "environment": {
+    "python": "3.13.16",
+    "numpy": "2.5.3",
+    "scikit_learn": "1.9.1",
+    "platform": "Linux-6.18.44-fc-v114-x86_64-with-glibc2.39",
+    "git_commit": "24a3cceef25263879cb38e2c99d43b70b221fdba"
+  },
+  "data": {
+    "train": {
+      "episodes": 120,
+      "samples": 172800,
+      "leak_episodes": 55,
+      "positive_samples": 38710,
+      "fingerprint_sha256": "b4f062ef462d59a77bd4159b347212b4d822a0e9d8552c66c7a5d93397e18a60"
+    },
+    "val": {
+      "episodes": 60,
+      "samples": 86400,
+      "leak_episodes": 32,
+      "positive_samples": 23633,
+      "fingerprint_sha256": "d4fc652b4fabb90e318bfb3cb4c847ea42849763cb35f2c46392725a120bdb22"
+    },
+    "test": {
+      "episodes": 60,
+      "samples": 86400,
+      "leak_episodes": 33,
+      "positive_samples": 18471,
+      "fingerprint_sha256": "f786cd1b0dadd37a448d1752a2d6856a426dbf2c684e24a91c303bbb9c3023f9"
+    }
+  },
+  "ranking_by_test_f1": [
+    "isolation_forest",
+    "cusum",
+    "mass_balance_threshold"
+  ],
+  "results": {
+    "mass_balance_threshold": {
+      "initial_params": {
+        "window": 15,
+        "k": 4.0
+      },
+      "improvement": {
+        "best_params": {
+          "window": 60,
+          "k": 2.0
+        },
+        "best_val_objective": 0.8337581953060703,
+        "evaluations": 13,
+        "stop_reason": "converged (no candidate improved by min_delta)",
+        "history": [
+          {
+            "iteration": 0,
+            "accepted": true,
+            "reason": "initial parameters",
+            "params": {
+              "window": 15,
+              "k": 4.0
+            },
+            "objective": 0.7486837579702094,
+            "val_timestep": {
+              "precision": 0.9989409771251059,
+              "recall": 0.5986967376126603,
+              "false_positive_rate": 0.00023897908136441122,
+              "f1": 0.7486837579702094
+            },
+            "val_event": {
+              "leak_episodes": 32,
+              "event_recall": 0.71875,
+              "median_detection_delay_min": 10.0,
+              "mean_detection_delay_min": 74.73913043478261,
+              "clean_episodes": 28,
+              "episode_false_alarm_rate": 0.03571428571428571
+            },
+            "fit_seconds": 0.0325200820000191
+          },
+          {
+            "iteration": 1,
+            "accepted": true,
+            "gain": 0.0414888847920748,
+            "candidates_evaluated": 4,
+            "reason": "improved validation objective",
+            "params": {
+              "window": 15,
+              "k": 3.0
+            },
+            "objective": 0.7901726427622842,
+            "val_timestep": {
+              "precision": 0.9965857115248341,
+              "recall": 0.654593153641095,
+              "false_positive_rate": 0.0008443927541542531,
+              "f1": 0.7901726427622842
+            },
+            "val_event": {
+              "leak_episodes": 32,
+              "event_recall": 0.8125,
+              "median_detection_delay_min": 8.0,
+              "mean_detection_delay_min": 98.3076923076923,
+              "clean_episodes": 28,
+              "episode_false_alarm_rate": 0.10714285714285714
+            },
+            "fit_seconds": 0.008244681999997283
+          },
+          {
+            "iteration": 2,
+            "accepted": true,
+            "gain": 0.02710192983359727,
+            "candidates_evaluated": 3,
+            "reason": "improved validation objective",
+            "params": {
+              "window": 15,
+              "k": 2.0
+            },
+            "objective": 0.8172745725958814,
+            "val_timestep": {
+              "precision": 0.9600309580407983,
+              "recall": 0.7348199551474633,
+              "false_positive_rate": 0.01151879172176462,
+              "f1": 0.8324624898135277
+            },
+            "val_event": {
+              "leak_episodes": 32,
+              "event_recall": 0.90625,
+              "median_detection_delay_min": 6.0,
+              "mean_detection_delay_min": 65.44827586206897,
+              "clean_episodes": 28,
+              "episode_false_alarm_rate": 0.4642857142857143
+            },
+            "fit_seconds": 0.00795530499999586
+          },
+          {
+            "iteration": 3,
+            "accepted": true,
+            "gain": 0.013715057605808156,
+            "candidates_evaluated": 2,
+            "reason": "improved validation objective",
+            "params": {
+              "window": 30,
+              "k": 2.0
+            },
+            "objective": 0.8309896302016896,
+            "val_timestep": {
+              "precision": 0.9624092967428665,
+              "recall": 0.7464139127491219,
+              "false_positive_rate": 0.010977105804005289,
+              "f1": 0.8407606882417424
+            },
+            "val_event": {
+              "leak_episodes": 32,
+              "event_recall": 0.90625,
+              "median_detection_delay_min": 12.0,
+              "mean_detection_delay_min": 104.86206896551724,
+              "clean_episodes": 28,
+              "episode_false_alarm_rate": 0.35714285714285715
+            },
+            "fit_seconds": 0.008654493000051389
+          },
+          {
+            "iteration": 4,
+            "accepted": true,
+            "gain": 0.002768565104380727,
+            "candidates_evaluated": 1,
+            "reason": "improved validation objective",
+            "params": {
+              "window": 60,
+              "k": 2.0
+            },
+            "objective": 0.8337581953060703,
+            "val_timestep": {
+              "precision": 0.9636004824032453,
+              "recall": 0.7437904624888927,
+              "false_positive_rate": 0.010578807335064604,
+              "f1": 0.8395462686567163
+            },
+            "val_event": {
+              "leak_episodes": 32,
+              "event_recall": 0.84375,
+              "median_detection_delay_min": 16.0,
+              "mean_detection_delay_min": 88.51851851851852,
+              "clean_episodes": 28,
+              "episode_false_alarm_rate": 0.25
+            },
+            "fit_seconds": 0.008222463999970842
+          },
+          {
+            "iteration": 5,
+            "accepted": false,
+            "gain": -0.02604164350542515,
+            "candidates_evaluated": 2,
+            "reason": "best gain -0.0260 < min_delta 0.002",
+            "params": {
+              "window": 120,
+              "k": 2.0
+            },
+            "objective": 0.8077165518006452,
+            "val_timestep": {
+              "precision": 0.9589133363268971,
+              "recall": 0.7228874878348073,
+              "false_positive_rate": 0.011662179170583268,
+              "f1": 0.8243383435064778
+            },
+            "val_event": {
+              "leak_episodes": 32,
+              "event_recall": 0.84375,
+              "median_detection_delay_min": 37.0,
+              "mean_detection_delay_min": 114.22222222222223,
+              "clean_episodes": 28,
+              "episode_false_alarm_rate": 0.21428571428571427
+            },
+            "fit_seconds": 0.0076162320000321415
+          }
+        ]
+      },
+      "test_initial": {
+        "confusion": {
+          "tp": 12646,
+          "fp": 55,
+          "tn": 67874,
+          "fn": 5825
+        },
+        "timestep": {
+          "precision": 0.9956696323124163,
+          "recall": 0.684640788262682,
+          "false_positive_rate": 0.0008096689190183868,
+          "f1": 0.8113691774669576
+        },
+        "event": {
+          "leak_episodes": 33,
+          "event_recall": 0.7878787878787878,
+          "median_detection_delay_min": 9.5,
+          "mean_detection_delay_min": 88.03846153846153,
+          "clean_episodes": 27,
+          "episode_false_alarm_rate": 0.037037037037037035
+        },
+        "runtime": {
+          "predict_seconds": 0.0028437379999672885,
+          "samples": 86400,
+          "predict_us_per_sample": 0.03291363425888066,
+          "fit_seconds": 0.007905569000001833
+        },
+        "per_episode": [
+          {
+            "episode_id": 212,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.685,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 129,
+            "confusion": {
+              "tp": 927,
+              "fp": 0,
+              "tn": 508,
+              "fn": 5
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 9.481,
+            "meter_bias": 0.187,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 5
+          },
+          {
+            "episode_id": 184,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.863,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 105,
+            "confusion": {
+              "tp": 666,
+              "fp": 0,
+              "tn": 770,
+              "fn": 4
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 10.399,
+            "meter_bias": 0.682,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 4
+          },
+          {
+            "episode_id": 188,
+            "confusion": {
+              "tp": 317,
+              "fp": 0,
+              "tn": 1116,
+              "fn": 7
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 8.308,
+            "meter_bias": -0.581,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 7
+          },
+          {
+            "episode_id": 11,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.381,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 142,
+            "confusion": {
+              "tp": 745,
+              "fp": 0,
+              "tn": 687,
+              "fn": 8
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 6.721,
+            "meter_bias": 0.117,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 8
+          },
+          {
+            "episode_id": 43,
+            "confusion": {
+              "tp": 0,
+              "fp": 14,
+              "tn": 1426,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.981,
+            "demand_spike": true,
+            "false_alarm": true
+          },
+          {
+            "episode_id": 209,
+            "confusion": {
+              "tp": 707,
+              "fp": 0,
+              "tn": 583,
+              "fn": 150
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 4.743,
+            "meter_bias": 1.262,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 81
+          },
+          {
+            "episode_id": 160,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 635,
+              "fn": 805
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 1.252,
+            "meter_bias": -0.658,
+            "demand_spike": true,
+            "detected": false,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": null
+          },
+          {
+            "episode_id": 61,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.174,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 57,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.034,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 237,
+            "confusion": {
+              "tp": 116,
+              "fp": 0,
+              "tn": 912,
+              "fn": 412
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 4.807,
+            "meter_bias": -1.04,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 283
+          },
+          {
+            "episode_id": 23,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.247,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 164,
+            "confusion": {
+              "tp": 490,
+              "fp": 0,
+              "tn": 942,
+              "fn": 8
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 8.725,
+            "meter_bias": -0.662,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 8
+          },
+          {
+            "episode_id": 204,
+            "confusion": {
+              "tp": 633,
+              "fp": 0,
+              "tn": 800,
+              "fn": 7
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 7.425,
+            "meter_bias": 0.082,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 7
+          },
+          {
+            "episode_id": 15,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1357,
+              "fn": 83
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 0.412,
+            "meter_bias": 0.298,
+            "demand_spike": false,
+            "detected": false,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": null
+          },
+          {
+            "episode_id": 176,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.111,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 60,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.021,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 109,
+            "confusion": {
+              "tp": 795,
+              "fp": 0,
+              "tn": 630,
+              "fn": 15
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 5.943,
+            "meter_bias": -0.301,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 11
+          },
+          {
+            "episode_id": 137,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.355,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 190,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1367,
+              "fn": 73
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 0.674,
+            "meter_bias": 0.081,
+            "demand_spike": false,
+            "detected": false,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": null
+          },
+          {
+            "episode_id": 31,
+            "confusion": {
+              "tp": 819,
+              "fp": 0,
+              "tn": 601,
+              "fn": 20
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 6.256,
+            "meter_bias": 0.343,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 6
+          },
+          {
+            "episode_id": 208,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.366,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 16,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.717,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 44,
+            "confusion": {
+              "tp": 422,
+              "fp": 0,
+              "tn": 1011,
+              "fn": 7
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 7.438,
+            "meter_bias": 0.348,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 7
+          },
+          {
+            "episode_id": 223,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.274,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 219,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1212,
+              "fn": 228
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 2.911,
+            "meter_bias": -1.634,
+            "demand_spike": true,
+            "detected": false,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": null
+          },
+          {
+            "episode_id": 195,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.275,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 34,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.003,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 30,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.622,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 58,
+            "confusion": {
+              "tp": 782,
+              "fp": 0,
+              "tn": 638,
+              "fn": 20
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 4.35,
+            "meter_bias": 0.411,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 11
+          },
+          {
+            "episode_id": 202,
+            "confusion": {
+              "tp": 1239,
+              "fp": 0,
+              "tn": 183,
+              "fn": 18
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 5.252,
+            "meter_bias": -0.342,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 11
+          },
+          {
+            "episode_id": 35,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.186,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 77,
+            "confusion": {
+              "tp": 301,
+              "fp": 0,
+              "tn": 487,
+              "fn": 652
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 2.996,
+            "meter_bias": 0.701,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 180
+          },
+          {
+            "episode_id": 182,
+            "confusion": {
+              "tp": 286,
+              "fp": 0,
+              "tn": 913,
+              "fn": 241
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 4.119,
+            "meter_bias": 0.709,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 227
+          },
+          {
+            "episode_id": 49,
+            "confusion": {
+              "tp": 233,
+              "fp": 14,
+              "tn": 1186,
+              "fn": 7
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 6.046,
+            "meter_bias": -0.06,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 7
+          },
+          {
+            "episode_id": 6,
+            "confusion": {
+              "tp": 323,
+              "fp": 0,
+              "tn": 1111,
+              "fn": 6
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 11.735,
+            "meter_bias": -0.81,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 6
+          },
+          {
+            "episode_id": 102,
+            "confusion": {
+              "tp": 1173,
+              "fp": 13,
+              "tn": 234,
+              "fn": 20
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 5.679,
+            "meter_bias": -0.333,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 11
+          },
+          {
+            "episode_id": 175,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.705,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 139,
+            "confusion": {
+              "tp": 265,
+              "fp": 0,
+              "tn": 836,
+              "fn": 339
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 4.283,
+            "meter_bias": 0.143,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 311
+          },
+          {
+            "episode_id": 222,
+            "confusion": {
+              "tp": 275,
+              "fp": 14,
+              "tn": 1150,
+              "fn": 1
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 11.605,
+            "meter_bias": 1.636,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 1
+          },
+          {
+            "episode_id": 41,
+            "confusion": {
+              "tp": 254,
+              "fp": 0,
+              "tn": 1146,
+              "fn": 40
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 5.29,
+            "meter_bias": -1.077,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 13
+          },
+          {
+            "episode_id": 110,
+            "confusion": {
+              "tp": 55,
+              "fp": 0,
+              "tn": 1378,
+              "fn": 7
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 8.848,
+            "meter_bias": 0.081,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 7
+          },
+          {
+            "episode_id": 22,
+            "confusion": {
+              "tp": 11,
+              "fp": 0,
+              "tn": 753,
+              "fn": 676
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 3.016,
+            "meter_bias": 0.025,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 495
+          },
+          {
+            "episode_id": 19,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1346,
+              "fn": 94
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 3.409,
+            "meter_bias": 0.333,
+            "demand_spike": false,
+            "detected": false,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": null
+          },
+          {
+            "episode_id": 163,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.334,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 64,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.982,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 47,
+            "confusion": {
+              "tp": 3,
+              "fp": 0,
+              "tn": 1139,
+              "fn": 298
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 3.843,
+            "meter_bias": -0.556,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 225
+          },
+          {
+            "episode_id": 113,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1199,
+              "fn": 241
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 1.738,
+            "meter_bias": 0.552,
+            "demand_spike": false,
+            "detected": false,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": null
+          },
+          {
+            "episode_id": 140,
+            "confusion": {
+              "tp": 534,
+              "fp": 0,
+              "tn": 500,
+              "fn": 406
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 4.523,
+            "meter_bias": -0.274,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 352
+          },
+          {
+            "episode_id": 181,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.995,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 14,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.172,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 141,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 518,
+              "fn": 922
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 1.999,
+            "meter_bias": 0.495,
+            "demand_spike": true,
+            "detected": false,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": null
+          },
+          {
+            "episode_id": 194,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.552,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 36,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.978,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 97,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.217,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 193,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.074,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 205,
+            "confusion": {
+              "tp": 275,
+              "fp": 0,
+              "tn": 1160,
+              "fn": 5
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 9.509,
+            "meter_bias": 0.198,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 5
+          },
+          {
+            "episode_id": 136,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.49,
+            "demand_spike": false,
+            "false_alarm": false
+          }
+        ],
+        "timestep_ci95": {
+          "precision": [
+            0.9902739518004899,
+            0.9990927862985499
+          ],
+          "recall": [
+            0.5163908918842509,
+            0.8259456341511311
+          ],
+          "false_positive_rate": [
+            0.00018772626792566512,
+            0.0016619212139559118
+          ],
+          "f1": [
+            0.6790169647246227,
+            0.902636832640643
+          ]
+        }
+      },
+      "test_tuned": {
+        "confusion": {
+          "tp": 15503,
+          "fp": 792,
+          "tn": 67137,
+          "fn": 2968
+        },
+        "timestep": {
+          "precision": 0.9513961337833692,
+          "recall": 0.8393156840452601,
+          "false_positive_rate": 0.01165923243386477,
+          "f1": 0.8918483575907497
+        },
+        "event": {
+          "leak_episodes": 33,
+          "event_recall": 0.9090909090909091,
+          "median_detection_delay_min": 20.0,
+          "mean_detection_delay_min": 81.76666666666667,
+          "clean_episodes": 27,
+          "episode_false_alarm_rate": 0.14814814814814814
+        },
+        "runtime": {
+          "predict_seconds": 0.0027865659999974923,
+          "samples": 86400,
+          "predict_us_per_sample": 0.03225192129626727,
+          "fit_seconds": 0.008546084999977666
+        },
+        "per_episode": [
+          {
+            "episode_id": 212,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.685,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 129,
+            "confusion": {
+              "tp": 923,
+              "fp": 0,
+              "tn": 508,
+              "fn": 9
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 9.481,
+            "meter_bias": 0.187,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 9
+          },
+          {
+            "episode_id": 184,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.863,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 105,
+            "confusion": {
+              "tp": 667,
+              "fp": 4,
+              "tn": 766,
+              "fn": 3
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 10.399,
+            "meter_bias": 0.682,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 3
+          },
+          {
+            "episode_id": 188,
+            "confusion": {
+              "tp": 309,
+              "fp": 0,
+              "tn": 1116,
+              "fn": 15
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 8.308,
+            "meter_bias": -0.581,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 15
+          },
+          {
+            "episode_id": 11,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.381,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 142,
+            "confusion": {
+              "tp": 742,
+              "fp": 0,
+              "tn": 687,
+              "fn": 11
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 6.721,
+            "meter_bias": 0.117,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 11
+          },
+          {
+            "episode_id": 43,
+            "confusion": {
+              "tp": 0,
+              "fp": 102,
+              "tn": 1338,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.981,
+            "demand_spike": true,
+            "false_alarm": true
+          },
+          {
+            "episode_id": 209,
+            "confusion": {
+              "tp": 836,
+              "fp": 92,
+              "tn": 491,
+              "fn": 21
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 4.743,
+            "meter_bias": 1.262,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 20
+          },
+          {
+            "episode_id": 160,
+            "confusion": {
+              "tp": 1,
+              "fp": 0,
+              "tn": 635,
+              "fn": 804
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 1.252,
+            "meter_bias": -0.658,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 688
+          },
+          {
+            "episode_id": 61,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.174,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 57,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.034,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 237,
+            "confusion": {
+              "tp": 275,
+              "fp": 0,
+              "tn": 912,
+              "fn": 253
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 4.807,
+            "meter_bias": -1.04,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 246
+          },
+          {
+            "episode_id": 23,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.247,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 164,
+            "confusion": {
+              "tp": 482,
+              "fp": 0,
+              "tn": 942,
+              "fn": 16
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 8.725,
+            "meter_bias": -0.662,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 16
+          },
+          {
+            "episode_id": 204,
+            "confusion": {
+              "tp": 627,
+              "fp": 0,
+              "tn": 800,
+              "fn": 13
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 7.425,
+            "meter_bias": 0.082,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 13
+          },
+          {
+            "episode_id": 15,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1357,
+              "fn": 83
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 0.412,
+            "meter_bias": 0.298,
+            "demand_spike": false,
+            "detected": false,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": null
+          },
+          {
+            "episode_id": 176,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.111,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 60,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.021,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 109,
+            "confusion": {
+              "tp": 790,
+              "fp": 0,
+              "tn": 630,
+              "fn": 20
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 5.943,
+            "meter_bias": -0.301,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 20
+          },
+          {
+            "episode_id": 137,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.355,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 190,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1367,
+              "fn": 73
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 0.674,
+            "meter_bias": 0.081,
+            "demand_spike": false,
+            "detected": false,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": null
+          },
+          {
+            "episode_id": 31,
+            "confusion": {
+              "tp": 825,
+              "fp": 8,
+              "tn": 593,
+              "fn": 14
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 6.256,
+            "meter_bias": 0.343,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 14
+          },
+          {
+            "episode_id": 208,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.366,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 16,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.717,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 44,
+            "confusion": {
+              "tp": 419,
+              "fp": 1,
+              "tn": 1010,
+              "fn": 10
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 7.438,
+            "meter_bias": 0.348,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 10
+          },
+          {
+            "episode_id": 223,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.274,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 219,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1212,
+              "fn": 228
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 2.911,
+            "meter_bias": -1.634,
+            "demand_spike": true,
+            "detected": false,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": null
+          },
+          {
+            "episode_id": 195,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.275,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 34,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.003,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 30,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.622,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 58,
+            "confusion": {
+              "tp": 788,
+              "fp": 1,
+              "tn": 637,
+              "fn": 14
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 4.35,
+            "meter_bias": 0.411,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 14
+          },
+          {
+            "episode_id": 202,
+            "confusion": {
+              "tp": 1235,
+              "fp": 0,
+              "tn": 183,
+              "fn": 22
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 5.252,
+            "meter_bias": -0.342,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 22
+          },
+          {
+            "episode_id": 35,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.186,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 77,
+            "confusion": {
+              "tp": 876,
+              "fp": 1,
+              "tn": 486,
+              "fn": 77
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 2.996,
+            "meter_bias": 0.701,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 77
+          },
+          {
+            "episode_id": 182,
+            "confusion": {
+              "tp": 426,
+              "fp": 0,
+              "tn": 913,
+              "fn": 101
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 4.119,
+            "meter_bias": 0.709,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 99
+          },
+          {
+            "episode_id": 49,
+            "confusion": {
+              "tp": 225,
+              "fp": 2,
+              "tn": 1198,
+              "fn": 15
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 6.046,
+            "meter_bias": -0.06,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 15
+          },
+          {
+            "episode_id": 6,
+            "confusion": {
+              "tp": 316,
+              "fp": 0,
+              "tn": 1111,
+              "fn": 13
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 11.735,
+            "meter_bias": -0.81,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 13
+          },
+          {
+            "episode_id": 102,
+            "confusion": {
+              "tp": 1171,
+              "fp": 0,
+              "tn": 247,
+              "fn": 22
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 5.679,
+            "meter_bias": -0.333,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 22
+          },
+          {
+            "episode_id": 175,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.705,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 139,
+            "confusion": {
+              "tp": 441,
+              "fp": 6,
+              "tn": 830,
+              "fn": 163
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 4.283,
+            "meter_bias": 0.143,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 163
+          },
+          {
+            "episode_id": 222,
+            "confusion": {
+              "tp": 276,
+              "fp": 552,
+              "tn": 612,
+              "fn": 0
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 11.605,
+            "meter_bias": 1.636,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 0
+          },
+          {
+            "episode_id": 41,
+            "confusion": {
+              "tp": 263,
+              "fp": 0,
+              "tn": 1146,
+              "fn": 31
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 5.29,
+            "meter_bias": -1.077,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 31
+          },
+          {
+            "episode_id": 110,
+            "confusion": {
+              "tp": 52,
+              "fp": 0,
+              "tn": 1378,
+              "fn": 10
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 8.848,
+            "meter_bias": 0.081,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 10
+          },
+          {
+            "episode_id": 22,
+            "confusion": {
+              "tp": 484,
+              "fp": 0,
+              "tn": 753,
+              "fn": 203
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 3.016,
+            "meter_bias": 0.025,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 203
+          },
+          {
+            "episode_id": 19,
+            "confusion": {
+              "tp": 27,
+              "fp": 0,
+              "tn": 1346,
+              "fn": 67
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 3.409,
+            "meter_bias": 0.333,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 67
+          },
+          {
+            "episode_id": 163,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.334,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 64,
+            "confusion": {
+              "tp": 0,
+              "fp": 9,
+              "tn": 1431,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.982,
+            "demand_spike": false,
+            "false_alarm": true
+          },
+          {
+            "episode_id": 47,
+            "confusion": {
+              "tp": 173,
+              "fp": 0,
+              "tn": 1139,
+              "fn": 128
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 3.843,
+            "meter_bias": -0.556,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 128
+          },
+          {
+            "episode_id": 113,
+            "confusion": {
+              "tp": 45,
+              "fp": 0,
+              "tn": 1199,
+              "fn": 196
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 1.738,
+            "meter_bias": 0.552,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 191
+          },
+          {
+            "episode_id": 140,
+            "confusion": {
+              "tp": 727,
+              "fp": 0,
+              "tn": 500,
+              "fn": 213
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 4.523,
+            "meter_bias": -0.274,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 213
+          },
+          {
+            "episode_id": 181,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.995,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 14,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.172,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 141,
+            "confusion": {
+              "tp": 813,
+              "fp": 0,
+              "tn": 518,
+              "fn": 109
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 1.999,
+            "meter_bias": 0.495,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 109
+          },
+          {
+            "episode_id": 194,
+            "confusion": {
+              "tp": 0,
+              "fp": 2,
+              "tn": 1438,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.552,
+            "demand_spike": true,
+            "false_alarm": true
+          },
+          {
+            "episode_id": 36,
+            "confusion": {
+              "tp": 0,
+              "fp": 12,
+              "tn": 1428,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.978,
+            "demand_spike": false,
+            "false_alarm": true
+          },
+          {
+            "episode_id": 97,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.217,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 193,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.074,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 205,
+            "confusion": {
+              "tp": 269,
+              "fp": 0,
+              "tn": 1160,
+              "fn": 11
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 9.509,
+            "meter_bias": 0.198,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 11
+          },
+          {
+            "episode_id": 136,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.49,
+            "demand_spike": false,
+            "false_alarm": false
+          }
+        ],
+        "timestep_ci95": {
+          "precision": [
+            0.8786435530722398,
+            0.9969978644168306
+          ],
+          "recall": [
+            0.7301964807568768,
+            0.913371427132533
+          ],
+          "false_positive_rate": [
+            0.0006600514529727951,
+            0.029317440777510837
+          ],
+          "f1": [
+            0.8240387352220747,
+            0.9401653664662888
+          ]
+        }
+      },
+      "failure_analysis": {
+        "recall_by_leak_type": {
+          "burst": {
+            "n": 18,
+            "detected": 18,
+            "recall": 1.0
+          },
+          "gradual": {
+            "n": 15,
+            "detected": 12,
+            "recall": 0.8
+          }
+        },
+        "missed_events": [
+          {
+            "episode_id": 15,
+            "leak_type": "gradual",
+            "leak_peak_rate": 0.412
+          },
+          {
+            "episode_id": 190,
+            "leak_type": "gradual",
+            "leak_peak_rate": 0.674
+          },
+          {
+            "episode_id": 219,
+            "leak_type": "gradual",
+            "leak_peak_rate": 2.911
+          }
+        ],
+        "smallest_detected_leak_lpm": 1.252,
+        "false_alarm_episodes": 4,
+        "false_alarm_rate_with_demand_spike": 0.18181818181818182,
+        "false_alarm_rate_without_demand_spike": 0.125,
+        "mean_abs_meter_bias_false_alarm": 0.87325,
+        "mean_abs_meter_bias_all_clean": 0.4368148148148148,
+        "pre_leak_false_alarms": 9,
+        "hypotheses_untested": [
+          "Gradual leaks are missed more often than bursts (recall 0.80 vs 1.00); a longer integration window or trend feature may help.",
+          "False alarms are more frequent on episodes with demand spikes (0.18 vs 0.12); lag-compensating the outlet meter may reduce them.",
+          "False-alarm episodes have larger meter bias (|bias| 0.87 vs 0.44 L/min); per-episode baseline recalibration may help."
+        ]
+      }
+    },
+    "cusum": {
+      "initial_params": {
+        "drift": 0.5,
+        "h": 20.0
+      },
+      "improvement": {
+        "best_params": {
+          "drift": 1.0,
+          "h": 5.0
+        },
+        "best_val_objective": 0.8326871022020631,
+        "evaluations": 12,
+        "stop_reason": "converged (no candidate improved by min_delta)",
+        "history": [
+          {
+            "iteration": 0,
+            "accepted": true,
+            "reason": "initial parameters",
+            "params": {
+              "drift": 0.5,
+              "h": 20.0
+            },
+            "objective": 0.11104479312692594,
+            "val_timestep": {
+              "precision": 0.7907700285195748,
+              "recall": 0.7743409639064021,
+              "false_positive_rate": 0.07714244746443194,
+              "f1": 0.7824692677712454
+            },
+            "val_event": {
+              "leak_episodes": 32,
+              "event_recall": 0.90625,
+              "median_detection_delay_min": 11.0,
+              "mean_detection_delay_min": 105.17241379310344,
+              "clean_episodes": 28,
+              "episode_false_alarm_rate": 0.21428571428571427
+            },
+            "fit_seconds": 0.003843394000000444
+          },
+          {
+            "iteration": 1,
+            "accepted": true,
+            "gain": 0.6967706613039326,
+            "candidates_evaluated": 4,
+            "reason": "improved validation objective",
+            "params": {
+              "drift": 1.0,
+              "h": 20.0
+            },
+            "objective": 0.8078154544308586,
+            "val_timestep": {
+              "precision": 0.9993138722554891,
+              "recall": 0.6779080099860365,
+              "false_positive_rate": 0.00017525132633390157,
+              "f1": 0.8078154544308586
+            },
+            "val_event": {
+              "leak_episodes": 32,
+              "event_recall": 0.75,
+              "median_detection_delay_min": 10.5,
+              "mean_detection_delay_min": 99.0,
+              "clean_episodes": 28,
+              "episode_false_alarm_rate": 0.0
+            },
+            "fit_seconds": 0.0028793089999794574
+          },
+          {
+            "iteration": 2,
+            "accepted": true,
+            "gain": 0.012560814730996905,
+            "candidates_evaluated": 3,
+            "reason": "improved validation objective",
+            "params": {
+              "drift": 1.0,
+              "h": 10.0
+            },
+            "objective": 0.8203762691618555,
+            "val_timestep": {
+              "precision": 0.9958914869192194,
+              "recall": 0.6974569457961325,
+              "false_positive_rate": 0.0010833718355186643,
+              "f1": 0.8203762691618555
+            },
+            "val_event": {
+              "leak_episodes": 32,
+              "event_recall": 0.8125,
+              "median_detection_delay_min": 5.0,
+              "mean_detection_delay_min": 112.46153846153847,
+              "clean_episodes": 28,
+              "episode_false_alarm_rate": 0.14285714285714285
+            },
+            "fit_seconds": 0.003272804999994605
+          },
+          {
+            "iteration": 3,
+            "accepted": true,
+            "gain": 0.012310833040207636,
+            "candidates_evaluated": 2,
+            "reason": "improved validation objective",
+            "params": {
+              "drift": 1.0,
+              "h": 5.0
+            },
+            "objective": 0.8326871022020631,
+            "val_timestep": {
+              "precision": 0.9826752618855762,
+              "recall": 0.7224220369821859,
+              "false_positive_rate": 0.004795513566045852,
+              "f1": 0.8326871022020631
+            },
+            "val_event": {
+              "leak_episodes": 32,
+              "event_recall": 0.84375,
+              "median_detection_delay_min": 3.0,
+              "mean_detection_delay_min": 80.88888888888889,
+              "clean_episodes": 28,
+              "episode_false_alarm_rate": 0.21428571428571427
+            },
+            "fit_seconds": 0.0033049819999746433
+          },
+          {
+            "iteration": 4,
+            "accepted": false,
+            "gain": -0.05243166909875696,
+            "candidates_evaluated": 2,
+            "reason": "best gain -0.0524 < min_delta 0.002",
+            "params": {
+              "drift": 1.5,
+              "h": 5.0
+            },
+            "objective": 0.7802554331033061,
+            "val_timestep": {
+              "precision": 0.9965796224429389,
+              "recall": 0.6410950789150763,
+              "false_positive_rate": 0.0008284608153966256,
+              "f1": 0.7802554331033061
+            },
+            "val_event": {
+              "leak_episodes": 32,
+              "event_recall": 0.71875,
+              "median_detection_delay_min": 2.0,
+              "mean_detection_delay_min": 65.30434782608695,
+              "clean_episodes": 28,
+              "episode_false_alarm_rate": 0.17857142857142858
+            },
+            "fit_seconds": 0.0031123740000111866
+          }
+        ]
+      },
+      "test_initial": {
+        "confusion": {
+          "tp": 15776,
+          "fp": 2853,
+          "tn": 65076,
+          "fn": 2695
+        },
+        "timestep": {
+          "precision": 0.8468516828600569,
+          "recall": 0.8540956093335499,
+          "false_positive_rate": 0.04199973501744469,
+          "f1": 0.8504582210242587
+        },
+        "event": {
+          "leak_episodes": 33,
+          "event_recall": 0.9090909090909091,
+          "median_detection_delay_min": 8.5,
+          "mean_detection_delay_min": 73.16666666666667,
+          "clean_episodes": 27,
+          "episode_false_alarm_rate": 0.1111111111111111
+        },
+        "runtime": {
+          "predict_seconds": 0.041168018999997,
+          "samples": 86400,
+          "predict_us_per_sample": 0.4764817013888542,
+          "fit_seconds": 0.004457019999961176
+        },
+        "per_episode": [
+          {
+            "episode_id": 212,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.685,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 129,
+            "confusion": {
+              "tp": 928,
+              "fp": 0,
+              "tn": 508,
+              "fn": 4
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 9.481,
+            "meter_bias": 0.187,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 4
+          },
+          {
+            "episode_id": 184,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.863,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 105,
+            "confusion": {
+              "tp": 667,
+              "fp": 0,
+              "tn": 770,
+              "fn": 3
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 10.399,
+            "meter_bias": 0.682,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 3
+          },
+          {
+            "episode_id": 188,
+            "confusion": {
+              "tp": 319,
+              "fp": 0,
+              "tn": 1116,
+              "fn": 5
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 8.308,
+            "meter_bias": -0.581,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 5
+          },
+          {
+            "episode_id": 11,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.381,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 142,
+            "confusion": {
+              "tp": 747,
+              "fp": 0,
+              "tn": 687,
+              "fn": 6
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 6.721,
+            "meter_bias": 0.117,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 6
+          },
+          {
+            "episode_id": 43,
+            "confusion": {
+              "tp": 0,
+              "fp": 775,
+              "tn": 665,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.981,
+            "demand_spike": true,
+            "false_alarm": true
+          },
+          {
+            "episode_id": 209,
+            "confusion": {
+              "tp": 857,
+              "fp": 378,
+              "tn": 205,
+              "fn": 0
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 4.743,
+            "meter_bias": 1.262,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 0
+          },
+          {
+            "episode_id": 160,
+            "confusion": {
+              "tp": 10,
+              "fp": 0,
+              "tn": 635,
+              "fn": 795
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 1.252,
+            "meter_bias": -0.658,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 689
+          },
+          {
+            "episode_id": 61,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.174,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 57,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.034,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 237,
+            "confusion": {
+              "tp": 288,
+              "fp": 0,
+              "tn": 912,
+              "fn": 240
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 4.807,
+            "meter_bias": -1.04,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 238
+          },
+          {
+            "episode_id": 23,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.247,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 164,
+            "confusion": {
+              "tp": 492,
+              "fp": 0,
+              "tn": 942,
+              "fn": 6
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 8.725,
+            "meter_bias": -0.662,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 6
+          },
+          {
+            "episode_id": 204,
+            "confusion": {
+              "tp": 634,
+              "fp": 0,
+              "tn": 800,
+              "fn": 6
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 7.425,
+            "meter_bias": 0.082,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 6
+          },
+          {
+            "episode_id": 15,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1357,
+              "fn": 83
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 0.412,
+            "meter_bias": 0.298,
+            "demand_spike": false,
+            "detected": false,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": null
+          },
+          {
+            "episode_id": 176,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.111,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 60,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.021,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 109,
+            "confusion": {
+              "tp": 802,
+              "fp": 0,
+              "tn": 630,
+              "fn": 8
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 5.943,
+            "meter_bias": -0.301,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 8
+          },
+          {
+            "episode_id": 137,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.355,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 190,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1367,
+              "fn": 73
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 0.674,
+            "meter_bias": 0.081,
+            "demand_spike": false,
+            "detected": false,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": null
+          },
+          {
+            "episode_id": 31,
+            "confusion": {
+              "tp": 833,
+              "fp": 0,
+              "tn": 601,
+              "fn": 6
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 6.256,
+            "meter_bias": 0.343,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 6
+          },
+          {
+            "episode_id": 208,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.366,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 16,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.717,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 44,
+            "confusion": {
+              "tp": 424,
+              "fp": 0,
+              "tn": 1011,
+              "fn": 5
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 7.438,
+            "meter_bias": 0.348,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 5
+          },
+          {
+            "episode_id": 223,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.274,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 219,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1212,
+              "fn": 228
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 2.911,
+            "meter_bias": -1.634,
+            "demand_spike": true,
+            "detected": false,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": null
+          },
+          {
+            "episode_id": 195,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.275,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 34,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.003,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 30,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.622,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 58,
+            "confusion": {
+              "tp": 792,
+              "fp": 0,
+              "tn": 638,
+              "fn": 10
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 4.35,
+            "meter_bias": 0.411,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 10
+          },
+          {
+            "episode_id": 202,
+            "confusion": {
+              "tp": 1248,
+              "fp": 0,
+              "tn": 183,
+              "fn": 9
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 5.252,
+            "meter_bias": -0.342,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 9
+          },
+          {
+            "episode_id": 35,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.186,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 77,
+            "confusion": {
+              "tp": 880,
+              "fp": 0,
+              "tn": 487,
+              "fn": 73
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 2.996,
+            "meter_bias": 0.701,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 73
+          },
+          {
+            "episode_id": 182,
+            "confusion": {
+              "tp": 452,
+              "fp": 0,
+              "tn": 913,
+              "fn": 75
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 4.119,
+            "meter_bias": 0.709,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 75
+          },
+          {
+            "episode_id": 49,
+            "confusion": {
+              "tp": 234,
+              "fp": 37,
+              "tn": 1163,
+              "fn": 6
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 6.046,
+            "meter_bias": -0.06,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 6
+          },
+          {
+            "episode_id": 6,
+            "confusion": {
+              "tp": 325,
+              "fp": 0,
+              "tn": 1111,
+              "fn": 4
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 11.735,
+            "meter_bias": -0.81,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 4
+          },
+          {
+            "episode_id": 102,
+            "confusion": {
+              "tp": 1183,
+              "fp": 18,
+              "tn": 229,
+              "fn": 10
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 5.679,
+            "meter_bias": -0.333,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 10
+          },
+          {
+            "episode_id": 175,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.705,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 139,
+            "confusion": {
+              "tp": 451,
+              "fp": 0,
+              "tn": 836,
+              "fn": 153
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 4.283,
+            "meter_bias": 0.143,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 145
+          },
+          {
+            "episode_id": 222,
+            "confusion": {
+              "tp": 276,
+              "fp": 1126,
+              "tn": 38,
+              "fn": 0
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 11.605,
+            "meter_bias": 1.636,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 0
+          },
+          {
+            "episode_id": 41,
+            "confusion": {
+              "tp": 282,
+              "fp": 0,
+              "tn": 1146,
+              "fn": 12
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 5.29,
+            "meter_bias": -1.077,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 12
+          },
+          {
+            "episode_id": 110,
+            "confusion": {
+              "tp": 57,
+              "fp": 0,
+              "tn": 1378,
+              "fn": 5
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 8.848,
+            "meter_bias": 0.081,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 5
+          },
+          {
+            "episode_id": 22,
+            "confusion": {
+              "tp": 494,
+              "fp": 0,
+              "tn": 753,
+              "fn": 193
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 3.016,
+            "meter_bias": 0.025,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 193
+          },
+          {
+            "episode_id": 19,
+            "confusion": {
+              "tp": 31,
+              "fp": 0,
+              "tn": 1346,
+              "fn": 63
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 3.409,
+            "meter_bias": 0.333,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 63
+          },
+          {
+            "episode_id": 163,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.334,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 64,
+            "confusion": {
+              "tp": 0,
+              "fp": 324,
+              "tn": 1116,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.982,
+            "demand_spike": false,
+            "false_alarm": true
+          },
+          {
+            "episode_id": 47,
+            "confusion": {
+              "tp": 173,
+              "fp": 0,
+              "tn": 1139,
+              "fn": 128
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 3.843,
+            "meter_bias": -0.556,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 128
+          },
+          {
+            "episode_id": 113,
+            "confusion": {
+              "tp": 72,
+              "fp": 0,
+              "tn": 1199,
+              "fn": 169
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 1.738,
+            "meter_bias": 0.552,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 169
+          },
+          {
+            "episode_id": 140,
+            "confusion": {
+              "tp": 727,
+              "fp": 0,
+              "tn": 500,
+              "fn": 213
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 4.523,
+            "meter_bias": -0.274,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 213
+          },
+          {
+            "episode_id": 181,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.995,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 14,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.172,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 141,
+            "confusion": {
+              "tp": 823,
+              "fp": 0,
+              "tn": 518,
+              "fn": 99
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 1.999,
+            "meter_bias": 0.495,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 99
+          },
+          {
+            "episode_id": 194,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.552,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 36,
+            "confusion": {
+              "tp": 0,
+              "fp": 191,
+              "tn": 1249,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.978,
+            "demand_spike": false,
+            "false_alarm": true
+          },
+          {
+            "episode_id": 97,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.217,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 193,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.074,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 205,
+            "confusion": {
+              "tp": 275,
+              "fp": 4,
+              "tn": 1156,
+              "fn": 5
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 9.509,
+            "meter_bias": 0.198,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 5
+          },
+          {
+            "episode_id": 136,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.49,
+            "demand_spike": false,
+            "false_alarm": false
+          }
+        ],
+        "timestep_ci95": {
+          "precision": [
+            0.704093689951047,
+            0.9680907475265792
+          ],
+          "recall": [
+            0.7471064300360468,
+            0.9281068191542007
+          ],
+          "false_positive_rate": [
+            0.0073347545667262724,
+            0.08690425957442281
+          ],
+          "f1": [
+            0.7555146534774133,
+            0.9236262758544455
+          ]
+        }
+      },
+      "test_tuned": {
+        "confusion": {
+          "tp": 15389,
+          "fp": 519,
+          "tn": 67410,
+          "fn": 3082
+        },
+        "timestep": {
+          "precision": 0.9673749057078199,
+          "recall": 0.8331438471116885,
+          "false_positive_rate": 0.00764033034491896,
+          "f1": 0.8952558247767533
+        },
+        "event": {
+          "leak_episodes": 33,
+          "event_recall": 0.9090909090909091,
+          "median_detection_delay_min": 3.0,
+          "mean_detection_delay_min": 75.76666666666667,
+          "clean_episodes": 27,
+          "episode_false_alarm_rate": 0.37037037037037035
+        },
+        "runtime": {
+          "predict_seconds": 0.030538553999974738,
+          "samples": 86400,
+          "predict_us_per_sample": 0.35345548611081873,
+          "fit_seconds": 0.0029493229999957293
+        },
+        "per_episode": [
+          {
+            "episode_id": 212,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.685,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 129,
+            "confusion": {
+              "tp": 931,
+              "fp": 0,
+              "tn": 508,
+              "fn": 1
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 9.481,
+            "meter_bias": 0.187,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 1
+          },
+          {
+            "episode_id": 184,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.863,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 105,
+            "confusion": {
+              "tp": 670,
+              "fp": 0,
+              "tn": 770,
+              "fn": 0
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 10.399,
+            "meter_bias": 0.682,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 0
+          },
+          {
+            "episode_id": 188,
+            "confusion": {
+              "tp": 323,
+              "fp": 0,
+              "tn": 1116,
+              "fn": 1
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 8.308,
+            "meter_bias": -0.581,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 1
+          },
+          {
+            "episode_id": 11,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.381,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 142,
+            "confusion": {
+              "tp": 752,
+              "fp": 0,
+              "tn": 687,
+              "fn": 1
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 6.721,
+            "meter_bias": 0.117,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 1
+          },
+          {
+            "episode_id": 43,
+            "confusion": {
+              "tp": 0,
+              "fp": 104,
+              "tn": 1336,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.981,
+            "demand_spike": true,
+            "false_alarm": true
+          },
+          {
+            "episode_id": 209,
+            "confusion": {
+              "tp": 799,
+              "fp": 32,
+              "tn": 551,
+              "fn": 58
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 4.743,
+            "meter_bias": 1.262,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 5
+          },
+          {
+            "episode_id": 160,
+            "confusion": {
+              "tp": 24,
+              "fp": 0,
+              "tn": 635,
+              "fn": 781
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 1.252,
+            "meter_bias": -0.658,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 576
+          },
+          {
+            "episode_id": 61,
+            "confusion": {
+              "tp": 0,
+              "fp": 7,
+              "tn": 1433,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.174,
+            "demand_spike": true,
+            "false_alarm": true
+          },
+          {
+            "episode_id": 57,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.034,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 237,
+            "confusion": {
+              "tp": 257,
+              "fp": 0,
+              "tn": 912,
+              "fn": 271
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 4.807,
+            "meter_bias": -1.04,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 251
+          },
+          {
+            "episode_id": 23,
+            "confusion": {
+              "tp": 0,
+              "fp": 10,
+              "tn": 1430,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.247,
+            "demand_spike": true,
+            "false_alarm": true
+          },
+          {
+            "episode_id": 164,
+            "confusion": {
+              "tp": 497,
+              "fp": 0,
+              "tn": 942,
+              "fn": 1
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 8.725,
+            "meter_bias": -0.662,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 1
+          },
+          {
+            "episode_id": 204,
+            "confusion": {
+              "tp": 638,
+              "fp": 5,
+              "tn": 795,
+              "fn": 2
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 7.425,
+            "meter_bias": 0.082,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 2
+          },
+          {
+            "episode_id": 15,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1357,
+              "fn": 83
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 0.412,
+            "meter_bias": 0.298,
+            "demand_spike": false,
+            "detected": false,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": null
+          },
+          {
+            "episode_id": 176,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.111,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 60,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.021,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 109,
+            "confusion": {
+              "tp": 808,
+              "fp": 0,
+              "tn": 630,
+              "fn": 2
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 5.943,
+            "meter_bias": -0.301,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 2
+          },
+          {
+            "episode_id": 137,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.355,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 190,
+            "confusion": {
+              "tp": 0,
+              "fp": 2,
+              "tn": 1365,
+              "fn": 73
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 0.674,
+            "meter_bias": 0.081,
+            "demand_spike": false,
+            "detected": false,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": null
+          },
+          {
+            "episode_id": 31,
+            "confusion": {
+              "tp": 837,
+              "fp": 0,
+              "tn": 601,
+              "fn": 2
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 6.256,
+            "meter_bias": 0.343,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 2
+          },
+          {
+            "episode_id": 208,
+            "confusion": {
+              "tp": 0,
+              "fp": 18,
+              "tn": 1422,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.366,
+            "demand_spike": true,
+            "false_alarm": true
+          },
+          {
+            "episode_id": 16,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.717,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 44,
+            "confusion": {
+              "tp": 428,
+              "fp": 0,
+              "tn": 1011,
+              "fn": 1
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 7.438,
+            "meter_bias": 0.348,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 1
+          },
+          {
+            "episode_id": 223,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.274,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 219,
+            "confusion": {
+              "tp": 0,
+              "fp": 2,
+              "tn": 1210,
+              "fn": 228
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 2.911,
+            "meter_bias": -1.634,
+            "demand_spike": true,
+            "detected": false,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": null
+          },
+          {
+            "episode_id": 195,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.275,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 34,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.003,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 30,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.622,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 58,
+            "confusion": {
+              "tp": 799,
+              "fp": 0,
+              "tn": 638,
+              "fn": 3
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 4.35,
+            "meter_bias": 0.411,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 3
+          },
+          {
+            "episode_id": 202,
+            "confusion": {
+              "tp": 1254,
+              "fp": 0,
+              "tn": 183,
+              "fn": 3
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 5.252,
+            "meter_bias": -0.342,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 3
+          },
+          {
+            "episode_id": 35,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.186,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 77,
+            "confusion": {
+              "tp": 839,
+              "fp": 0,
+              "tn": 487,
+              "fn": 114
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 2.996,
+            "meter_bias": 0.701,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 114
+          },
+          {
+            "episode_id": 182,
+            "confusion": {
+              "tp": 358,
+              "fp": 0,
+              "tn": 913,
+              "fn": 169
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 4.119,
+            "meter_bias": 0.709,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 165
+          },
+          {
+            "episode_id": 49,
+            "confusion": {
+              "tp": 238,
+              "fp": 31,
+              "tn": 1169,
+              "fn": 2
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 6.046,
+            "meter_bias": -0.06,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 2
+          },
+          {
+            "episode_id": 6,
+            "confusion": {
+              "tp": 328,
+              "fp": 9,
+              "tn": 1102,
+              "fn": 1
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 11.735,
+            "meter_bias": -0.81,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 1
+          },
+          {
+            "episode_id": 102,
+            "confusion": {
+              "tp": 1190,
+              "fp": 20,
+              "tn": 227,
+              "fn": 3
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 5.679,
+            "meter_bias": -0.333,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 3
+          },
+          {
+            "episode_id": 175,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.705,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 139,
+            "confusion": {
+              "tp": 422,
+              "fp": 3,
+              "tn": 833,
+              "fn": 182
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 4.283,
+            "meter_bias": 0.143,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 139
+          },
+          {
+            "episode_id": 222,
+            "confusion": {
+              "tp": 276,
+              "fp": 183,
+              "tn": 981,
+              "fn": 0
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 11.605,
+            "meter_bias": 1.636,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 0
+          },
+          {
+            "episode_id": 41,
+            "confusion": {
+              "tp": 288,
+              "fp": 0,
+              "tn": 1146,
+              "fn": 6
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 5.29,
+            "meter_bias": -1.077,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 6
+          },
+          {
+            "episode_id": 110,
+            "confusion": {
+              "tp": 61,
+              "fp": 0,
+              "tn": 1378,
+              "fn": 1
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 8.848,
+            "meter_bias": 0.081,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 1
+          },
+          {
+            "episode_id": 22,
+            "confusion": {
+              "tp": 415,
+              "fp": 0,
+              "tn": 753,
+              "fn": 272
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 3.016,
+            "meter_bias": 0.025,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 217
+          },
+          {
+            "episode_id": 19,
+            "confusion": {
+              "tp": 30,
+              "fp": 2,
+              "tn": 1344,
+              "fn": 64
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 3.409,
+            "meter_bias": 0.333,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 64
+          },
+          {
+            "episode_id": 163,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.334,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 64,
+            "confusion": {
+              "tp": 0,
+              "fp": 21,
+              "tn": 1419,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.982,
+            "demand_spike": false,
+            "false_alarm": true
+          },
+          {
+            "episode_id": 47,
+            "confusion": {
+              "tp": 164,
+              "fp": 0,
+              "tn": 1139,
+              "fn": 137
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 3.843,
+            "meter_bias": -0.556,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 129
+          },
+          {
+            "episode_id": 113,
+            "confusion": {
+              "tp": 6,
+              "fp": 0,
+              "tn": 1199,
+              "fn": 235
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 1.738,
+            "meter_bias": 0.552,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 206
+          },
+          {
+            "episode_id": 140,
+            "confusion": {
+              "tp": 679,
+              "fp": 0,
+              "tn": 500,
+              "fn": 261
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 4.523,
+            "meter_bias": -0.274,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 260
+          },
+          {
+            "episode_id": 181,
+            "confusion": {
+              "tp": 0,
+              "fp": 4,
+              "tn": 1436,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.995,
+            "demand_spike": true,
+            "false_alarm": true
+          },
+          {
+            "episode_id": 14,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.172,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 141,
+            "confusion": {
+              "tp": 799,
+              "fp": 0,
+              "tn": 518,
+              "fn": 123
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 1.999,
+            "meter_bias": 0.495,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 116
+          },
+          {
+            "episode_id": 194,
+            "confusion": {
+              "tp": 0,
+              "fp": 15,
+              "tn": 1425,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.552,
+            "demand_spike": true,
+            "false_alarm": true
+          },
+          {
+            "episode_id": 36,
+            "confusion": {
+              "tp": 0,
+              "fp": 7,
+              "tn": 1433,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.978,
+            "demand_spike": false,
+            "false_alarm": true
+          },
+          {
+            "episode_id": 97,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.217,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 193,
+            "confusion": {
+              "tp": 0,
+              "fp": 14,
+              "tn": 1426,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.074,
+            "demand_spike": true,
+            "false_alarm": true
+          },
+          {
+            "episode_id": 205,
+            "confusion": {
+              "tp": 279,
+              "fp": 22,
+              "tn": 1138,
+              "fn": 1
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 9.509,
+            "meter_bias": 0.198,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 1
+          },
+          {
+            "episode_id": 136,
+            "confusion": {
+              "tp": 0,
+              "fp": 8,
+              "tn": 1432,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.49,
+            "demand_spike": false,
+            "false_alarm": true
+          }
+        ],
+        "timestep_ci95": {
+          "precision": [
+            0.9325391370482337,
+            0.98905109960584
+          ],
+          "recall": [
+            0.7194788852583649,
+            0.9123365137813677
+          ],
+          "false_positive_rate": [
+            0.0026762774991267784,
+            0.014115459649807507
+          ],
+          "f1": [
+            0.824673438423177,
+            0.9430336056595829
+          ]
+        }
+      },
+      "failure_analysis": {
+        "recall_by_leak_type": {
+          "burst": {
+            "n": 18,
+            "detected": 18,
+            "recall": 1.0
+          },
+          "gradual": {
+            "n": 15,
+            "detected": 12,
+            "recall": 0.8
+          }
+        },
+        "missed_events": [
+          {
+            "episode_id": 15,
+            "leak_type": "gradual",
+            "leak_peak_rate": 0.412
+          },
+          {
+            "episode_id": 190,
+            "leak_type": "gradual",
+            "leak_peak_rate": 0.674
+          },
+          {
+            "episode_id": 219,
+            "leak_type": "gradual",
+            "leak_peak_rate": 2.911
+          }
+        ],
+        "smallest_detected_leak_lpm": 1.252,
+        "false_alarm_episodes": 10,
+        "false_alarm_rate_with_demand_spike": 0.6363636363636364,
+        "false_alarm_rate_without_demand_spike": 0.1875,
+        "mean_abs_meter_bias_false_alarm": 0.5839,
+        "mean_abs_meter_bias_all_clean": 0.4368148148148148,
+        "pre_leak_false_alarms": 11,
+        "hypotheses_untested": [
+          "Gradual leaks are missed more often than bursts (recall 0.80 vs 1.00); a longer integration window or trend feature may help.",
+          "False alarms are more frequent on episodes with demand spikes (0.64 vs 0.19); lag-compensating the outlet meter may reduce them.",
+          "False-alarm episodes have larger meter bias (|bias| 0.58 vs 0.44 L/min); per-episode baseline recalibration may help."
+        ]
+      }
+    },
+    "isolation_forest": {
+      "initial_params": {
+        "window": 15,
+        "threshold_quantile": 0.01,
+        "n_estimators": 100,
+        "max_train_samples": 20000,
+        "random_state": 0
+      },
+      "improvement": {
+        "best_params": {
+          "window": 30,
+          "threshold_quantile": 0.01,
+          "n_estimators": 100,
+          "max_train_samples": 20000,
+          "random_state": 0
+        },
+        "best_val_objective": 0.860879790731719,
+        "evaluations": 8,
+        "stop_reason": "converged (no candidate improved by min_delta)",
+        "history": [
+          {
+            "iteration": 0,
+            "accepted": true,
+            "reason": "initial parameters",
+            "params": {
+              "window": 15,
+              "threshold_quantile": 0.01,
+              "n_estimators": 100,
+              "max_train_samples": 20000,
+              "random_state": 0
+            },
+            "objective": 0.854510464277123,
+            "val_timestep": {
+              "precision": 0.9901878798015276,
+              "recall": 0.7515338721279566,
+              "false_positive_rate": 0.002804021221342425,
+              "f1": 0.854510464277123
+            },
+            "val_event": {
+              "leak_episodes": 32,
+              "event_recall": 0.90625,
+              "median_detection_delay_min": 6.0,
+              "mean_detection_delay_min": 68.20689655172414,
+              "clean_episodes": 28,
+              "episode_false_alarm_rate": 0.35714285714285715
+            },
+            "fit_seconds": 0.38218264699997917
+          },
+          {
+            "iteration": 1,
+            "accepted": true,
+            "gain": 0.0063693264545960915,
+            "candidates_evaluated": 4,
+            "reason": "improved validation objective",
+            "params": {
+              "window": 30,
+              "threshold_quantile": 0.01,
+              "n_estimators": 100,
+              "max_train_samples": 20000,
+              "random_state": 0
+            },
+            "objective": 0.860879790731719,
+            "val_timestep": {
+              "precision": 0.9944555333776891,
+              "recall": 0.7589387720560233,
+              "false_positive_rate": 0.0015931938757627415,
+              "f1": 0.860879790731719
+            },
+            "val_event": {
+              "leak_episodes": 32,
+              "event_recall": 0.90625,
+              "median_detection_delay_min": 10.0,
+              "mean_detection_delay_min": 98.17241379310344,
+              "clean_episodes": 28,
+              "episode_false_alarm_rate": 0.21428571428571427
+            },
+            "fit_seconds": 0.29524771899997404
+          },
+          {
+            "iteration": 2,
+            "accepted": false,
+            "gain": -0.0015812490901619958,
+            "candidates_evaluated": 3,
+            "reason": "best gain -0.0016 < min_delta 0.002",
+            "params": {
+              "window": 60,
+              "threshold_quantile": 0.01,
+              "n_estimators": 100,
+              "max_train_samples": 20000,
+              "random_state": 0
+            },
+            "objective": 0.8592985416415571,
+            "val_timestep": {
+              "precision": 0.9984315482859063,
+              "recall": 0.7541996361020606,
+              "false_positive_rate": 0.0004460942852135676,
+              "f1": 0.8592985416415571
+            },
+            "val_event": {
+              "leak_episodes": 32,
+              "event_recall": 0.875,
+              "median_detection_delay_min": 18.0,
+              "mean_detection_delay_min": 88.64285714285714,
+              "clean_episodes": 28,
+              "episode_false_alarm_rate": 0.10714285714285714
+            },
+            "fit_seconds": 0.29654371700002
+          }
+        ]
+      },
+      "test_initial": {
+        "confusion": {
+          "tp": 15682,
+          "fp": 317,
+          "tn": 67612,
+          "fn": 2789
+        },
+        "timestep": {
+          "precision": 0.9801862616413526,
+          "recall": 0.8490065508093768,
+          "false_positive_rate": 0.00466663722416052,
+          "f1": 0.9098926602843053
+        },
+        "event": {
+          "leak_episodes": 33,
+          "event_recall": 0.9393939393939394,
+          "median_detection_delay_min": 5.0,
+          "mean_detection_delay_min": 66.74193548387096,
+          "clean_episodes": 27,
+          "episode_false_alarm_rate": 0.2962962962962963
+        },
+        "runtime": {
+          "predict_seconds": 0.755263914000011,
+          "samples": 86400,
+          "predict_us_per_sample": 8.74148048611124,
+          "fit_seconds": 0.28942680199997994
+        },
+        "per_episode": [
+          {
+            "episode_id": 212,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.685,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 129,
+            "confusion": {
+              "tp": 930,
+              "fp": 0,
+              "tn": 508,
+              "fn": 2
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 9.481,
+            "meter_bias": 0.187,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 2
+          },
+          {
+            "episode_id": 184,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.863,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 105,
+            "confusion": {
+              "tp": 669,
+              "fp": 8,
+              "tn": 762,
+              "fn": 1
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 10.399,
+            "meter_bias": 0.682,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 1
+          },
+          {
+            "episode_id": 188,
+            "confusion": {
+              "tp": 321,
+              "fp": 0,
+              "tn": 1116,
+              "fn": 3
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 8.308,
+            "meter_bias": -0.581,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 3
+          },
+          {
+            "episode_id": 11,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.381,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 142,
+            "confusion": {
+              "tp": 749,
+              "fp": 0,
+              "tn": 687,
+              "fn": 4
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 6.721,
+            "meter_bias": 0.117,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 4
+          },
+          {
+            "episode_id": 43,
+            "confusion": {
+              "tp": 0,
+              "fp": 44,
+              "tn": 1396,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.981,
+            "demand_spike": true,
+            "false_alarm": true
+          },
+          {
+            "episode_id": 209,
+            "confusion": {
+              "tp": 821,
+              "fp": 18,
+              "tn": 565,
+              "fn": 36
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 4.743,
+            "meter_bias": 1.262,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 5
+          },
+          {
+            "episode_id": 160,
+            "confusion": {
+              "tp": 44,
+              "fp": 0,
+              "tn": 635,
+              "fn": 761
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 1.252,
+            "meter_bias": -0.658,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 576
+          },
+          {
+            "episode_id": 61,
+            "confusion": {
+              "tp": 0,
+              "fp": 8,
+              "tn": 1432,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.174,
+            "demand_spike": true,
+            "false_alarm": true
+          },
+          {
+            "episode_id": 57,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.034,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 237,
+            "confusion": {
+              "tp": 294,
+              "fp": 0,
+              "tn": 912,
+              "fn": 234
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 4.807,
+            "meter_bias": -1.04,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 152
+          },
+          {
+            "episode_id": 23,
+            "confusion": {
+              "tp": 0,
+              "fp": 4,
+              "tn": 1436,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.247,
+            "demand_spike": true,
+            "false_alarm": true
+          },
+          {
+            "episode_id": 164,
+            "confusion": {
+              "tp": 494,
+              "fp": 0,
+              "tn": 942,
+              "fn": 4
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 8.725,
+            "meter_bias": -0.662,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 4
+          },
+          {
+            "episode_id": 204,
+            "confusion": {
+              "tp": 637,
+              "fp": 0,
+              "tn": 800,
+              "fn": 3
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 7.425,
+            "meter_bias": 0.082,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 3
+          },
+          {
+            "episode_id": 15,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1357,
+              "fn": 83
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 0.412,
+            "meter_bias": 0.298,
+            "demand_spike": false,
+            "detected": false,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": null
+          },
+          {
+            "episode_id": 176,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.111,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 60,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.021,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 109,
+            "confusion": {
+              "tp": 805,
+              "fp": 0,
+              "tn": 630,
+              "fn": 5
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 5.943,
+            "meter_bias": -0.301,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 5
+          },
+          {
+            "episode_id": 137,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.355,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 190,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1367,
+              "fn": 73
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 0.674,
+            "meter_bias": 0.081,
+            "demand_spike": false,
+            "detected": false,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": null
+          },
+          {
+            "episode_id": 31,
+            "confusion": {
+              "tp": 836,
+              "fp": 18,
+              "tn": 583,
+              "fn": 3
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 6.256,
+            "meter_bias": 0.343,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 3
+          },
+          {
+            "episode_id": 208,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.366,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 16,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.717,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 44,
+            "confusion": {
+              "tp": 427,
+              "fp": 0,
+              "tn": 1011,
+              "fn": 2
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 7.438,
+            "meter_bias": 0.348,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 2
+          },
+          {
+            "episode_id": 223,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.274,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 219,
+            "confusion": {
+              "tp": 4,
+              "fp": 0,
+              "tn": 1212,
+              "fn": 224
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 2.911,
+            "meter_bias": -1.634,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 224
+          },
+          {
+            "episode_id": 195,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.275,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 34,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.003,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 30,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.622,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 58,
+            "confusion": {
+              "tp": 798,
+              "fp": 0,
+              "tn": 638,
+              "fn": 4
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 4.35,
+            "meter_bias": 0.411,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 4
+          },
+          {
+            "episode_id": 202,
+            "confusion": {
+              "tp": 1251,
+              "fp": 0,
+              "tn": 183,
+              "fn": 6
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 5.252,
+            "meter_bias": -0.342,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 6
+          },
+          {
+            "episode_id": 35,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.186,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 77,
+            "confusion": {
+              "tp": 893,
+              "fp": 0,
+              "tn": 487,
+              "fn": 60
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 2.996,
+            "meter_bias": 0.701,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 59
+          },
+          {
+            "episode_id": 182,
+            "confusion": {
+              "tp": 396,
+              "fp": 0,
+              "tn": 913,
+              "fn": 131
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 4.119,
+            "meter_bias": 0.709,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 97
+          },
+          {
+            "episode_id": 49,
+            "confusion": {
+              "tp": 237,
+              "fp": 16,
+              "tn": 1184,
+              "fn": 3
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 6.046,
+            "meter_bias": -0.06,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 3
+          },
+          {
+            "episode_id": 6,
+            "confusion": {
+              "tp": 326,
+              "fp": 0,
+              "tn": 1111,
+              "fn": 3
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 11.735,
+            "meter_bias": -0.81,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 3
+          },
+          {
+            "episode_id": 102,
+            "confusion": {
+              "tp": 1186,
+              "fp": 14,
+              "tn": 233,
+              "fn": 7
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 5.679,
+            "meter_bias": -0.333,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 7
+          },
+          {
+            "episode_id": 175,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.705,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 139,
+            "confusion": {
+              "tp": 430,
+              "fp": 0,
+              "tn": 836,
+              "fn": 174
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 4.283,
+            "meter_bias": 0.143,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 91
+          },
+          {
+            "episode_id": 222,
+            "confusion": {
+              "tp": 275,
+              "fp": 108,
+              "tn": 1056,
+              "fn": 1
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 11.605,
+            "meter_bias": 1.636,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 1
+          },
+          {
+            "episode_id": 41,
+            "confusion": {
+              "tp": 286,
+              "fp": 0,
+              "tn": 1146,
+              "fn": 8
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 5.29,
+            "meter_bias": -1.077,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 8
+          },
+          {
+            "episode_id": 110,
+            "confusion": {
+              "tp": 60,
+              "fp": 0,
+              "tn": 1378,
+              "fn": 2
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 8.848,
+            "meter_bias": 0.081,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 2
+          },
+          {
+            "episode_id": 22,
+            "confusion": {
+              "tp": 494,
+              "fp": 0,
+              "tn": 753,
+              "fn": 193
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 3.016,
+            "meter_bias": 0.025,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 174
+          },
+          {
+            "episode_id": 19,
+            "confusion": {
+              "tp": 27,
+              "fp": 0,
+              "tn": 1346,
+              "fn": 67
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 3.409,
+            "meter_bias": 0.333,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 67
+          },
+          {
+            "episode_id": 163,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.334,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 64,
+            "confusion": {
+              "tp": 0,
+              "fp": 3,
+              "tn": 1437,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.982,
+            "demand_spike": false,
+            "false_alarm": true
+          },
+          {
+            "episode_id": 47,
+            "confusion": {
+              "tp": 199,
+              "fp": 0,
+              "tn": 1139,
+              "fn": 102
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 3.843,
+            "meter_bias": -0.556,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 102
+          },
+          {
+            "episode_id": 113,
+            "confusion": {
+              "tp": 48,
+              "fp": 0,
+              "tn": 1199,
+              "fn": 193
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 1.738,
+            "meter_bias": 0.552,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 181
+          },
+          {
+            "episode_id": 140,
+            "confusion": {
+              "tp": 741,
+              "fp": 0,
+              "tn": 500,
+              "fn": 199
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 4.523,
+            "meter_bias": -0.274,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 172
+          },
+          {
+            "episode_id": 181,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.995,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 14,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.172,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 141,
+            "confusion": {
+              "tp": 727,
+              "fp": 0,
+              "tn": 518,
+              "fn": 195
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 1.999,
+            "meter_bias": 0.495,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 105
+          },
+          {
+            "episode_id": 194,
+            "confusion": {
+              "tp": 0,
+              "fp": 16,
+              "tn": 1424,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.552,
+            "demand_spike": true,
+            "false_alarm": true
+          },
+          {
+            "episode_id": 36,
+            "confusion": {
+              "tp": 0,
+              "fp": 14,
+              "tn": 1426,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.978,
+            "demand_spike": false,
+            "false_alarm": true
+          },
+          {
+            "episode_id": 97,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.217,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 193,
+            "confusion": {
+              "tp": 0,
+              "fp": 15,
+              "tn": 1425,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.074,
+            "demand_spike": true,
+            "false_alarm": true
+          },
+          {
+            "episode_id": 205,
+            "confusion": {
+              "tp": 277,
+              "fp": 15,
+              "tn": 1145,
+              "fn": 3
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 9.509,
+            "meter_bias": 0.198,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 3
+          },
+          {
+            "episode_id": 136,
+            "confusion": {
+              "tp": 0,
+              "fp": 16,
+              "tn": 1424,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.49,
+            "demand_spike": false,
+            "false_alarm": true
+          }
+        ],
+        "timestep_ci95": {
+          "precision": [
+            0.9609217751190201,
+            0.9922743171166212
+          ],
+          "recall": [
+            0.7418662679254322,
+            0.9224179779971949
+          ],
+          "false_positive_rate": [
+            0.0018286598573021642,
+            0.008338769042381018
+          ],
+          "f1": [
+            0.8447710026890247,
+            0.9520381497907976
+          ]
+        }
+      },
+      "test_tuned": {
+        "confusion": {
+          "tp": 15792,
+          "fp": 238,
+          "tn": 67691,
+          "fn": 2679
+        },
+        "timestep": {
+          "precision": 0.9851528384279477,
+          "recall": 0.8549618320610687,
+          "false_positive_rate": 0.003503658231388656,
+          "f1": 0.9154517260369265
+        },
+        "event": {
+          "leak_episodes": 33,
+          "event_recall": 0.9090909090909091,
+          "median_detection_delay_min": 10.0,
+          "mean_detection_delay_min": 66.96666666666667,
+          "clean_episodes": 27,
+          "episode_false_alarm_rate": 0.14814814814814814
+        },
+        "runtime": {
+          "predict_seconds": 0.8630612430000042,
+          "samples": 86400,
+          "predict_us_per_sample": 9.989134756944493,
+          "fit_seconds": 0.274746585999992
+        },
+        "per_episode": [
+          {
+            "episode_id": 212,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.685,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 129,
+            "confusion": {
+              "tp": 928,
+              "fp": 0,
+              "tn": 508,
+              "fn": 4
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 9.481,
+            "meter_bias": 0.187,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 4
+          },
+          {
+            "episode_id": 184,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.863,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 105,
+            "confusion": {
+              "tp": 668,
+              "fp": 3,
+              "tn": 767,
+              "fn": 2
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 10.399,
+            "meter_bias": 0.682,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 2
+          },
+          {
+            "episode_id": 188,
+            "confusion": {
+              "tp": 317,
+              "fp": 0,
+              "tn": 1116,
+              "fn": 7
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 8.308,
+            "meter_bias": -0.581,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 7
+          },
+          {
+            "episode_id": 11,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.381,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 142,
+            "confusion": {
+              "tp": 748,
+              "fp": 0,
+              "tn": 687,
+              "fn": 5
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 6.721,
+            "meter_bias": 0.117,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 5
+          },
+          {
+            "episode_id": 43,
+            "confusion": {
+              "tp": 0,
+              "fp": 32,
+              "tn": 1408,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.981,
+            "demand_spike": true,
+            "false_alarm": true
+          },
+          {
+            "episode_id": 209,
+            "confusion": {
+              "tp": 837,
+              "fp": 24,
+              "tn": 559,
+              "fn": 20
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 4.743,
+            "meter_bias": 1.262,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 20
+          },
+          {
+            "episode_id": 160,
+            "confusion": {
+              "tp": 47,
+              "fp": 0,
+              "tn": 635,
+              "fn": 758
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 1.252,
+            "meter_bias": -0.658,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 586
+          },
+          {
+            "episode_id": 61,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.174,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 57,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.034,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 237,
+            "confusion": {
+              "tp": 278,
+              "fp": 0,
+              "tn": 912,
+              "fn": 250
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 4.807,
+            "meter_bias": -1.04,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 202
+          },
+          {
+            "episode_id": 23,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.247,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 164,
+            "confusion": {
+              "tp": 490,
+              "fp": 0,
+              "tn": 942,
+              "fn": 8
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 8.725,
+            "meter_bias": -0.662,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 8
+          },
+          {
+            "episode_id": 204,
+            "confusion": {
+              "tp": 634,
+              "fp": 0,
+              "tn": 800,
+              "fn": 6
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 7.425,
+            "meter_bias": 0.082,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 6
+          },
+          {
+            "episode_id": 15,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1357,
+              "fn": 83
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 0.412,
+            "meter_bias": 0.298,
+            "demand_spike": false,
+            "detected": false,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": null
+          },
+          {
+            "episode_id": 176,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.111,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 60,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.021,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 109,
+            "confusion": {
+              "tp": 801,
+              "fp": 0,
+              "tn": 630,
+              "fn": 9
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 5.943,
+            "meter_bias": -0.301,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 9
+          },
+          {
+            "episode_id": 137,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.355,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 190,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1367,
+              "fn": 73
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 0.674,
+            "meter_bias": 0.081,
+            "demand_spike": false,
+            "detected": false,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": null
+          },
+          {
+            "episode_id": 31,
+            "confusion": {
+              "tp": 833,
+              "fp": 8,
+              "tn": 593,
+              "fn": 6
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 6.256,
+            "meter_bias": 0.343,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 6
+          },
+          {
+            "episode_id": 208,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.366,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 16,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.717,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 44,
+            "confusion": {
+              "tp": 424,
+              "fp": 1,
+              "tn": 1010,
+              "fn": 5
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 7.438,
+            "meter_bias": 0.348,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 5
+          },
+          {
+            "episode_id": 223,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.274,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 219,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1212,
+              "fn": 228
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 2.911,
+            "meter_bias": -1.634,
+            "demand_spike": true,
+            "detected": false,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": null
+          },
+          {
+            "episode_id": 195,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.275,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 34,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.003,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 30,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.622,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 58,
+            "confusion": {
+              "tp": 793,
+              "fp": 0,
+              "tn": 638,
+              "fn": 9
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 4.35,
+            "meter_bias": 0.411,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 9
+          },
+          {
+            "episode_id": 202,
+            "confusion": {
+              "tp": 1246,
+              "fp": 0,
+              "tn": 183,
+              "fn": 11
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 5.252,
+            "meter_bias": -0.342,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 11
+          },
+          {
+            "episode_id": 35,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.186,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 77,
+            "confusion": {
+              "tp": 891,
+              "fp": 0,
+              "tn": 487,
+              "fn": 62
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 2.996,
+            "meter_bias": 0.701,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 62
+          },
+          {
+            "episode_id": 182,
+            "confusion": {
+              "tp": 427,
+              "fp": 0,
+              "tn": 913,
+              "fn": 100
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 4.119,
+            "meter_bias": 0.709,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 91
+          },
+          {
+            "episode_id": 49,
+            "confusion": {
+              "tp": 234,
+              "fp": 29,
+              "tn": 1171,
+              "fn": 6
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 6.046,
+            "meter_bias": -0.06,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 6
+          },
+          {
+            "episode_id": 6,
+            "confusion": {
+              "tp": 323,
+              "fp": 0,
+              "tn": 1111,
+              "fn": 6
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 11.735,
+            "meter_bias": -0.81,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 6
+          },
+          {
+            "episode_id": 102,
+            "confusion": {
+              "tp": 1181,
+              "fp": 9,
+              "tn": 238,
+              "fn": 12
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 5.679,
+            "meter_bias": -0.333,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 12
+          },
+          {
+            "episode_id": 175,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.705,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 139,
+            "confusion": {
+              "tp": 448,
+              "fp": 0,
+              "tn": 836,
+              "fn": 156
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 4.283,
+            "meter_bias": 0.143,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 139
+          },
+          {
+            "episode_id": 222,
+            "confusion": {
+              "tp": 274,
+              "fp": 109,
+              "tn": 1055,
+              "fn": 2
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 11.605,
+            "meter_bias": 1.636,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 2
+          },
+          {
+            "episode_id": 41,
+            "confusion": {
+              "tp": 280,
+              "fp": 0,
+              "tn": 1146,
+              "fn": 14
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 5.29,
+            "meter_bias": -1.077,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 14
+          },
+          {
+            "episode_id": 110,
+            "confusion": {
+              "tp": 57,
+              "fp": 0,
+              "tn": 1378,
+              "fn": 5
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 8.848,
+            "meter_bias": 0.081,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 5
+          },
+          {
+            "episode_id": 22,
+            "confusion": {
+              "tp": 507,
+              "fp": 0,
+              "tn": 753,
+              "fn": 180
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 3.016,
+            "meter_bias": 0.025,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 180
+          },
+          {
+            "episode_id": 19,
+            "confusion": {
+              "tp": 30,
+              "fp": 0,
+              "tn": 1346,
+              "fn": 64
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 3.409,
+            "meter_bias": 0.333,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 64
+          },
+          {
+            "episode_id": 163,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.334,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 64,
+            "confusion": {
+              "tp": 0,
+              "fp": 4,
+              "tn": 1436,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.982,
+            "demand_spike": false,
+            "false_alarm": true
+          },
+          {
+            "episode_id": 47,
+            "confusion": {
+              "tp": 186,
+              "fp": 0,
+              "tn": 1139,
+              "fn": 115
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 3.843,
+            "meter_bias": -0.556,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 115
+          },
+          {
+            "episode_id": 113,
+            "confusion": {
+              "tp": 61,
+              "fp": 0,
+              "tn": 1199,
+              "fn": 180
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 1.738,
+            "meter_bias": 0.552,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 141
+          },
+          {
+            "episode_id": 140,
+            "confusion": {
+              "tp": 753,
+              "fp": 0,
+              "tn": 500,
+              "fn": 187
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 4.523,
+            "meter_bias": -0.274,
+            "demand_spike": false,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 187
+          },
+          {
+            "episode_id": 181,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.995,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 14,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.172,
+            "demand_spike": false,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 141,
+            "confusion": {
+              "tp": 820,
+              "fp": 0,
+              "tn": 518,
+              "fn": 102
+            },
+            "leak_type": "gradual",
+            "leak_peak_rate": 1.999,
+            "meter_bias": 0.495,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": false,
+            "delay_minutes": 101
+          },
+          {
+            "episode_id": 194,
+            "confusion": {
+              "tp": 0,
+              "fp": 9,
+              "tn": 1431,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.552,
+            "demand_spike": true,
+            "false_alarm": true
+          },
+          {
+            "episode_id": 36,
+            "confusion": {
+              "tp": 0,
+              "fp": 7,
+              "tn": 1433,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.978,
+            "demand_spike": false,
+            "false_alarm": true
+          },
+          {
+            "episode_id": 97,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.217,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 193,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": -0.074,
+            "demand_spike": true,
+            "false_alarm": false
+          },
+          {
+            "episode_id": 205,
+            "confusion": {
+              "tp": 276,
+              "fp": 3,
+              "tn": 1157,
+              "fn": 4
+            },
+            "leak_type": "burst",
+            "leak_peak_rate": 9.509,
+            "meter_bias": 0.198,
+            "demand_spike": true,
+            "detected": true,
+            "pre_leak_false_alarm": true,
+            "delay_minutes": 4
+          },
+          {
+            "episode_id": 136,
+            "confusion": {
+              "tp": 0,
+              "fp": 0,
+              "tn": 1440,
+              "fn": 0
+            },
+            "leak_type": null,
+            "leak_peak_rate": 0.0,
+            "meter_bias": 0.49,
+            "demand_spike": false,
+            "false_alarm": false
+          }
+        ],
+        "timestep_ci95": {
+          "precision": [
+            0.9672732412867624,
+            0.9961810601667304
+          ],
+          "recall": [
+            0.7494913350347276,
+            0.9262254104925765
+          ],
+          "false_positive_rate": [
+            0.000894561126142607,
+            0.007105580094064227
+          ],
+          "f1": [
+            0.8507437375073013,
+            0.9564928317718998
+          ]
+        }
+      },
+      "failure_analysis": {
+        "recall_by_leak_type": {
+          "burst": {
+            "n": 18,
+            "detected": 18,
+            "recall": 1.0
+          },
+          "gradual": {
+            "n": 15,
+            "detected": 12,
+            "recall": 0.8
+          }
+        },
+        "missed_events": [
+          {
+            "episode_id": 15,
+            "leak_type": "gradual",
+            "leak_peak_rate": 0.412
+          },
+          {
+            "episode_id": 190,
+            "leak_type": "gradual",
+            "leak_peak_rate": 0.674
+          },
+          {
+            "episode_id": 219,
+            "leak_type": "gradual",
+            "leak_peak_rate": 2.911
+          }
+        ],
+        "smallest_detected_leak_lpm": 1.252,
+        "false_alarm_episodes": 4,
+        "false_alarm_rate_with_demand_spike": 0.18181818181818182,
+        "false_alarm_rate_without_demand_spike": 0.125,
+        "mean_abs_meter_bias_false_alarm": 0.87325,
+        "mean_abs_meter_bias_all_clean": 0.4368148148148148,
+        "pre_leak_false_alarms": 8,
+        "hypotheses_untested": [
+          "Gradual leaks are missed more often than bursts (recall 0.80 vs 1.00); a longer integration window or trend feature may help.",
+          "False alarms are more frequent on episodes with demand spikes (0.18 vs 0.12); lag-compensating the outlet meter may reduce them.",
+          "False-alarm episodes have larger meter bias (|bias| 0.87 vs 0.44 L/min); per-episode baseline recalibration may help."
+        ]
+      }
+    }
+  }
+}
