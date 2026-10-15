@@ -2,8 +2,9 @@
 
 **GENESIS is an AI-powered invention and engineering agent.** It takes a real-world problem, generates candidate solutions, builds prototypes, runs controlled experiments, compares them with measurable evidence, and improves them through bounded iterations, keeping a tamper-evident record of everything it did.
 
-> **Status: Milestone 2 complete.** Milestone 1 built the end-to-end loop; Milestone 2 added causal signal
-> corrections, pre-registered hypotheses with paired-bootstrap verdicts, stress tests, and reproducibility checks.
+> **Status: Milestone 3 complete (on branch `milestone-3-leak-safe-calibration`).** Milestone 1 built the end-to-end
+> loop; Milestone 2 added signal corrections and pre-registered hypotheses and exposed a critical failure;
+> Milestone 3 adds leak-safe calibration, a raw-signal safety net and multi-day simulation, and fixes that failure.
 > All results in this repo come from **synthetic data**. Nothing here is validated on physical pipes or sensors yet.
 
 ---
@@ -27,6 +28,41 @@ problem (YAML) ──► synthetic data ──► 3 candidate detectors ──�
 | Identify failures | `genesis/analysis.py`: misses by leak type and size, false alarms vs confounders |
 | Bounded improvement | Coordinate search with `max_iterations`, `max_evaluations`, `min_delta` hard limits |
 | Reproducible evidence | Hash-chained `experiments/ledger.jsonl`, config hash, data SHA-256, git commit |
+
+## Milestone 3 results (synthetic): [`full report`](reports/milestone-3-leak-safe-calibration.md)
+
+**Problem:** Milestone 2's daily recalibration absorbs any leak that is already running in the morning calibration
+window. On realistic multi-day data (leaks last 6–72 h), 52–60% of leak days start that way, and Milestone 2
+caught only 6–44% of leak days.
+
+**Fix (`leak_safe` detector):**
+- a trusted per-site bias carried across days
+- rejection of abnormal calibration windows
+- pressure corroboration to tell a meter swap from a leak
+- a calibration alarm instead of silent absorption
+- an independent raw-signal safety net
+- NaN-aware handling of sensor gaps
+- configurable safe fallbacks while calibration is uncertain
+
+Every safeguard can be switched on or off; with all of them off, `leak_safe` equals the Milestone 2 detector exactly.
+
+Final confirmatory suite (v3: fresh seeds, hypotheses committed before running, 32 test sites × 7 days each):
+
+| Scenario | F1: M1 / M2 / **M3** | Leak-day recall: M1 / M2 / **M3** | False alarms per leak-free day: M1 / M2 / **M3** |
+|---|---|---|---|
+| Realistic | 0.701 / 0.362 / **0.945** | 0.721 / 0.395 / **1.000** | 0.028 / 0.033 / 0.044 |
+| Leaks at midnight | 0.829 / 0.299 / **0.917** | 0.703 / 0.154 / **0.824** | 0.722 / 0.015 / 0.481* |
+| Already leaking at first observation | 0.691 / 0.139 / **0.957** | 0.796 / 0.155 / **0.961** | 0.041 / 0.041 / **0.000** |
+| Heavy sensor stress | 0.399 / 0.060 / **0.902** | 0.314 / 0.059 / **0.843** | 0.110 / 0.035 / 0.064 |
+| Exact M2 failure replay | 0.913 / 0.614 / **0.983** | 0.980 / 0.531 / **1.000** | 0.000 / 0.118 / **0.000** |
+
+21 of 26 hypotheses supported, 5 inconclusive, 0 contradicted. \*One site-day accounts for 55 of the 64 alarm onsets:
+the calibration alarm flaps because it has no hysteresis (unresolved; M1 shows a similar single-site outlier).
+On its own, the raw safety net recovers 7–76 of the leak days Milestone 2 missed in every scenario. Inside the full
+system it is mostly a second line behind the carried-forward core. The false-alarm cost on realistic data
+(+0.01–0.02 per leak-free day) is *not* shown to be within a 0.05 margin (inconclusive). Getting here took three
+confirmatory rounds: v1 had a cold-start gap, and v2 had a tuning objective that ignored the number of alarms.
+Both are documented in the report.
 
 ## Milestone 2 results (synthetic): [`full report`](reports/milestone-2-false-alarm-reduction.md)
 
@@ -67,9 +103,12 @@ cd project-genesis-ai
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements-dev.txt
 
-python -m pytest -q                                                 # 52 tests
+python -m pytest -q                                                 # 81 tests
 python -m genesis run --config configs/water_leak.yaml              # Milestone 1, ~15 s
 python -m genesis run --config configs/water_leak_m2_confirm.yaml   # Milestone 2 confirmatory, ~1 min
+python -m genesis run --config configs/water_leak_m3v3_confirm.yaml # Milestone 3 final confirmatory, ~1.5 min
+python tools/make_m3_configs.py                                     # regenerate Milestone 3 configs
+python tools/m3_summary.py                                          # cross-candidate safety-net evidence
 python -m genesis check-repro experiments/runs/<run_id>             # re-run a recorded run, compare results
 python -m genesis verify-ledger                                     # check evidence integrity
 ```
@@ -80,13 +119,15 @@ Each run writes `experiments/runs/<run_id>/{config.json,results.json,report.md}`
 
 ```
 genesis/
-  data/synthetic_leak.py     # simulator: flows, pressure, leaks, confounders (SYNTHETIC)
+  data/synthetic_leak.py     # simulator: independent days (SYNTHETIC)
+  data/sequences.py          # M3: multi-day sites, drift, meter swaps, dropouts, multi-day leaks (SYNTHETIC)
   preprocess.py              # M2: causal meter-delay correction + daily bias recalibration
   detectors/                 # candidate solutions + registry
     base.py                  #   Detector interface, causal smoothing
     mass_balance.py          #   A: smoothed inflow-outflow threshold
     cusum.py                 #   B: one-sided CUSUM
     isolation_forest.py      #   C: unsupervised ML on flow + pressure residuals
+    leak_safe.py             #   M3: leak-safe calibration + raw safety net (all safeguards switchable)
   evaluation.py              # metrics, event metrics, runtime, bootstrap CIs, objective
   improvement.py             # bounded improvement loop (validation only)
   analysis.py                # failure analysis + untested hypotheses
@@ -95,8 +136,9 @@ genesis/
   ledger.py                  # hash-chained evidence ledger
   pipeline.py                # end-to-end orchestration
   report.py                  # markdown report (always carries the synthetic banner)
-  cli.py                     # `python -m genesis run | verify-ledger`
-configs/                     # experiment definitions (M1, M2 exploratory/confirm/stress)
+  cli.py                     # `python -m genesis run | verify-ledger | check-repro`
+tools/                       # M3 config generator (holds the pre-registered hypotheses), evidence summary
+configs/                     # experiment definitions (M1, M2, M3 dev / v1 / v2 / v3 suites)
 experiments/                 # run artifacts + ledger (committed as evidence)
 reports/                     # curated milestone reports
 docs/architecture.md         # design + roadmap
@@ -114,8 +156,8 @@ tests/                       # unit, causality, reproducibility, end-to-end
 
 ## Roadmap
 
-See [`docs/architecture.md`](docs/architecture.md#roadmap). Next up (Milestone 3): a *baseline guard* that fixes the
-pre-existing-leak failure, gated on the stress test that exposed it.
+See [`docs/architecture.md`](docs/architecture.md#roadmap). Next up: alarm hysteresis (to fix the calibration-alarm
+flapping), slow-leak vs drift stress tests, then the agentic research layer and real-data contact.
 
 ---
 *Built with Claude Code.*

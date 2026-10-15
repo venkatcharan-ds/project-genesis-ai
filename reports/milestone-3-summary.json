@@ -1,0 +1,846 @@
+{
+  "20261015T190640Z_water_leak_m3_dev_c495bd86": {
+    "run_id": "20261015T190640Z_water_leak_m3_dev_c495bd86",
+    "m2_candidate": "m2_corr",
+    "m2_missed_leak_days": 34,
+    "hypotheses": {},
+    "m3_full_on_m2_missed_days": {
+      "caught_by_any": 31,
+      "caught_by_core": 31,
+      "caught_by_raw_net": 19,
+      "caught_by_cal_alarm": 26,
+      "caught_ONLY_by_raw_net_or_cal": 0
+    },
+    "raw_net_alone_on_m2_missed_days": 20
+  },
+  "20261015T190714Z_water_leak_m3_confirm_512a5823": {
+    "run_id": "20261015T190714Z_water_leak_m3_confirm_512a5823",
+    "m2_candidate": "m2_corr",
+    "m2_missed_leak_days": 22,
+    "hypotheses": {
+      "R1": {
+        "verdict": "inconclusive",
+        "diff": 0.11111111111111116,
+        "ci95": [
+          0.0,
+          0.26315789473684215
+        ]
+      },
+      "R2": {
+        "verdict": "supported",
+        "diff": 0.524700676641258,
+        "ci95": [
+          0.43064512113846715,
+          0.6038614974769827
+        ]
+      },
+      "R3": {
+        "verdict": "supported",
+        "diff": 0.25444775026773225,
+        "ci95": [
+          0.052586445092873135,
+          0.5221092944146033
+        ]
+      },
+      "R4": {
+        "verdict": "supported",
+        "diff": -213.11111111111114,
+        "ci95": [
+          -583.875885167464,
+          -2.4462022703818422
+        ]
+      },
+      "R5": {
+        "verdict": "supported",
+        "diff": -0.032432432432432434,
+        "ci95": [
+          -0.07692307692307693,
+          0.011237542055481494
+        ]
+      },
+      "R6": {
+        "verdict": "supported",
+        "diff": -0.016216216216216217,
+        "ci95": [
+          -0.04864864864864865,
+          0.021166835528537653
+        ]
+      },
+      "R7": {
+        "verdict": "inconclusive",
+        "diff": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "R8": {
+        "verdict": "inconclusive",
+        "diff": 0.11111111111111116,
+        "ci95": [
+          0.0,
+          0.26315789473684215
+        ]
+      },
+      "R9": {
+        "verdict": "supported",
+        "diff": 0.18309335929370807,
+        "ci95": [
+          0.05227249852931153,
+          0.35977741355747445
+        ]
+      }
+    },
+    "m3_full_on_m2_missed_days": {
+      "caught_by_any": 21,
+      "caught_by_core": 21,
+      "caught_by_raw_net": 15,
+      "caught_by_cal_alarm": 19,
+      "caught_ONLY_by_raw_net_or_cal": 0
+    },
+    "raw_net_alone_on_m2_missed_days": 13
+  },
+  "20261015T190747Z_water_leak_m3_stress_midnight_11922745": {
+    "run_id": "20261015T190747Z_water_leak_m3_stress_midnight_11922745",
+    "m2_candidate": "m2_corr",
+    "m2_missed_leak_days": 69,
+    "hypotheses": {
+      "N1": {
+        "verdict": "supported",
+        "diff": 0.6559139784946236,
+        "ci95": [
+          0.5861945812807883,
+          0.7222222222222222
+        ]
+      },
+      "N2": {
+        "verdict": "supported",
+        "diff": 0.4358974358974359,
+        "ci95": [
+          0.3055555555555556,
+          0.5758373205741626
+        ]
+      },
+      "N3": {
+        "verdict": "supported",
+        "diff": 0.4731182795698925,
+        "ci95": [
+          0.38352316453747887,
+          0.5656565656565656
+        ]
+      },
+      "N4": {
+        "verdict": "inconclusive",
+        "diff": 0.03816793893129771,
+        "ci95": [
+          -0.015273093082430913,
+          0.11030289560579115
+        ]
+      }
+    },
+    "m3_full_on_m2_missed_days": {
+      "caught_by_any": 61,
+      "caught_by_core": 61,
+      "caught_by_raw_net": 31,
+      "caught_by_cal_alarm": 46,
+      "caught_ONLY_by_raw_net_or_cal": 0
+    },
+    "raw_net_alone_on_m2_missed_days": 44
+  },
+  "20261015T190823Z_water_leak_m3_stress_coldstart_70423b7e": {
+    "run_id": "20261015T190823Z_water_leak_m3_stress_coldstart_70423b7e",
+    "m2_candidate": "m2_corr",
+    "m2_missed_leak_days": 81,
+    "hypotheses": {
+      "C1": {
+        "verdict": "supported",
+        "diff": 0.6888888888888889,
+        "ci95": [
+          0.5541912330171751,
+          0.8118409586056644
+        ]
+      },
+      "C2": {
+        "verdict": "inconclusive",
+        "diff": -0.15555555555555556,
+        "ci95": [
+          -0.28260869565217384,
+          -0.041605392156862875
+        ]
+      },
+      "C3": {
+        "verdict": "supported",
+        "diff": 0.6,
+        "ci95": [
+          0.47367006225240516,
+          0.7381428571428571
+        ]
+      }
+    },
+    "m3_full_on_m2_missed_days": {
+      "caught_by_any": 63,
+      "caught_by_core": 51,
+      "caught_by_raw_net": 56,
+      "caught_by_cal_alarm": 52,
+      "caught_ONLY_by_raw_net_or_cal": 12
+    },
+    "raw_net_alone_on_m2_missed_days": 54
+  },
+  "20261015T190852Z_water_leak_m3_stress_sensors_9b8fd20a": {
+    "run_id": "20261015T190852Z_water_leak_m3_stress_sensors_9b8fd20a",
+    "m2_candidate": "m2_corr",
+    "m2_missed_leak_days": 41,
+    "hypotheses": {
+      "S1": {
+        "verdict": "supported",
+        "diff": 0.6220473227521583,
+        "ci95": [
+          0.46643344288672545,
+          0.757168631694096
+        ]
+      },
+      "S2": {
+        "verdict": "inconclusive",
+        "diff": 0.12138728323699423,
+        "ci95": [
+          -0.09774480853495904,
+          0.5476190476190477
+        ]
+      },
+      "S3": {
+        "verdict": "inconclusive",
+        "diff": 0.12138728323699423,
+        "ci95": [
+          -0.09774480853495904,
+          0.5476190476190477
+        ]
+      },
+      "S4": {
+        "verdict": "inconclusive",
+        "diff": -0.011560693641618505,
+        "ci95": [
+          -0.08242814877430263,
+          0.08048315958299919
+        ]
+      }
+    },
+    "m3_full_on_m2_missed_days": {
+      "caught_by_any": 32,
+      "caught_by_core": 24,
+      "caught_by_raw_net": 11,
+      "caught_by_cal_alarm": 25,
+      "caught_ONLY_by_raw_net_or_cal": 8
+    },
+    "raw_net_alone_on_m2_missed_days": 12
+  },
+  "20261015T190934Z_water_leak_m3_replay_m2_failure_93fffb89": {
+    "run_id": "20261015T190934Z_water_leak_m3_replay_m2_failure_93fffb89",
+    "m2_candidate": "thr_corr_persist",
+    "m2_missed_leak_days": 26,
+    "hypotheses": {
+      "P1": {
+        "verdict": "supported",
+        "diff": 0.5306122448979591,
+        "ci95": [
+          0.3921568627450981,
+          0.6595851063829786
+        ]
+      },
+      "P2": {
+        "verdict": "supported",
+        "diff": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "P3": {
+        "verdict": "supported",
+        "diff": 0.3685274959566188,
+        "ci95": [
+          0.25011306703776837,
+          0.4990165341745809
+        ]
+      },
+      "P4": {
+        "verdict": "supported",
+        "diff": -0.01,
+        "ci95": [
+          -0.04,
+          0.02
+        ]
+      }
+    },
+    "m3_full_on_m2_missed_days": {
+      "caught_by_any": 26,
+      "caught_by_core": 26,
+      "caught_by_raw_net": 25,
+      "caught_by_cal_alarm": 26,
+      "caught_ONLY_by_raw_net_or_cal": 0
+    }
+  },
+  "20261015T191425Z_water_leak_m3v2_confirm_2951410f": {
+    "run_id": "20261015T191425Z_water_leak_m3v2_confirm_2951410f",
+    "m2_candidate": "m2_corr",
+    "m2_missed_leak_days": 34,
+    "hypotheses": {
+      "R1": {
+        "verdict": "supported",
+        "diff": 0.6117693709859162,
+        "ci95": [
+          0.5011199927848402,
+          0.7132274113760351
+        ]
+      },
+      "R2": {
+        "verdict": "supported",
+        "diff": 0.6346153846153846,
+        "ci95": [
+          0.5404885654885655,
+          0.7291807432432433
+        ]
+      },
+      "R3": {
+        "verdict": "supported",
+        "diff": 0.22054627322973386,
+        "ci95": [
+          0.10476642855337137,
+          0.4032326346884954
+        ]
+      },
+      "R4": {
+        "verdict": "supported",
+        "diff": -216.84444444444446,
+        "ci95": [
+          -477.6131944444444,
+          -26.589293592437
+        ]
+      },
+      "R5": {
+        "verdict": "inconclusive",
+        "diff": 0.09302325581395349,
+        "ci95": [
+          0.017338548933625672,
+          0.17724426958604172
+        ]
+      },
+      "R6": {
+        "verdict": "inconclusive",
+        "diff": 0.11046511627906977,
+        "ci95": [
+          0.035278816729003744,
+          0.1978021978021978
+        ]
+      },
+      "R7": {
+        "verdict": "supported",
+        "diff": 0.46153846153846156,
+        "ci95": [
+          0.3620450191570882,
+          0.5510746851932261
+        ]
+      },
+      "R8": {
+        "verdict": "contradicted",
+        "diff": 0.09883720930232558,
+        "ci95": [
+          0.03894855144855145,
+          0.1656441717791411
+        ]
+      },
+      "R9": {
+        "verdict": "supported",
+        "diff": 0.019230769230769162,
+        "ci95": [
+          0.0,
+          0.060015151515151445
+        ]
+      }
+    },
+    "m3_full_on_m2_missed_days": {
+      "caught_by_any": 33,
+      "caught_by_core": 33,
+      "caught_by_raw_net": 26,
+      "caught_by_cal_alarm": 24,
+      "caught_ONLY_by_raw_net_or_cal": 0
+    },
+    "raw_net_alone_on_m2_missed_days": 24
+  },
+  "20261015T191509Z_water_leak_m3v2_stress_midnight_e8452d58": {
+    "run_id": "20261015T191509Z_water_leak_m3v2_stress_midnight_e8452d58",
+    "m2_candidate": "m2_corr",
+    "m2_missed_leak_days": 55,
+    "hypotheses": {
+      "N1": {
+        "verdict": "supported",
+        "diff": 0.5974025974025974,
+        "ci95": [
+          0.49365305758602246,
+          0.6987984194843891
+        ]
+      },
+      "N2": {
+        "verdict": "supported",
+        "diff": 0.4054054054054055,
+        "ci95": [
+          0.2432432432432433,
+          0.5714285714285714
+        ]
+      },
+      "N3": {
+        "verdict": "supported",
+        "diff": 0.35064935064935066,
+        "ci95": [
+          0.20000000000000007,
+          0.4893725575336518
+        ]
+      },
+      "N4": {
+        "verdict": "inconclusive",
+        "diff": 0.040816326530612235,
+        "ci95": [
+          -0.0704225352112676,
+          0.21060798548094364
+        ]
+      }
+    },
+    "m3_full_on_m2_missed_days": {
+      "caught_by_any": 46,
+      "caught_by_core": 46,
+      "caught_by_raw_net": 32,
+      "caught_by_cal_alarm": 35,
+      "caught_ONLY_by_raw_net_or_cal": 0
+    },
+    "raw_net_alone_on_m2_missed_days": 30
+  },
+  "20261015T191554Z_water_leak_m3v2_stress_coldstart_3deb31bd": {
+    "run_id": "20261015T191554Z_water_leak_m3v2_stress_coldstart_3deb31bd",
+    "m2_candidate": "m2_corr",
+    "m2_missed_leak_days": 76,
+    "hypotheses": {
+      "C1": {
+        "verdict": "supported",
+        "diff": 0.7272727272727273,
+        "ci95": [
+          0.5833069620253165,
+          0.8681318681318682
+        ]
+      },
+      "C2": {
+        "verdict": "supported",
+        "diff": 0.011363636363636354,
+        "ci95": [
+          -0.047633390705679915,
+          0.06452660242982827
+        ]
+      },
+      "C3": {
+        "verdict": "supported",
+        "diff": 0.7045454545454546,
+        "ci95": [
+          0.5913978494623656,
+          0.8333333333333334
+        ]
+      },
+      "C4": {
+        "verdict": "inconclusive",
+        "diff": 0.045454545454545414,
+        "ci95": [
+          -0.011768207282913123,
+          0.1190605590062112
+        ]
+      },
+      "C5": {
+        "verdict": "supported",
+        "diff": -0.058823529411764705,
+        "ci95": [
+          -0.0962962962962963,
+          -0.027192863900527112
+        ]
+      }
+    },
+    "m3_full_on_m2_missed_days": {
+      "caught_by_any": 67,
+      "caught_by_core": 61,
+      "caught_by_raw_net": 63,
+      "caught_by_cal_alarm": 62,
+      "caught_ONLY_by_raw_net_or_cal": 6
+    },
+    "raw_net_alone_on_m2_missed_days": 62
+  },
+  "20261015T191637Z_water_leak_m3v2_stress_sensors_cfe17284": {
+    "run_id": "20261015T191637Z_water_leak_m3v2_stress_sensors_cfe17284",
+    "m2_candidate": "m2_corr",
+    "m2_missed_leak_days": 40,
+    "hypotheses": {
+      "S1": {
+        "verdict": "supported",
+        "diff": 0.8130146020484057,
+        "ci95": [
+          0.7137515037647608,
+          0.903518031508447
+        ]
+      },
+      "S2": {
+        "verdict": "supported",
+        "diff": 0.35982708219327353,
+        "ci95": [
+          0.15275096793135182,
+          0.624525957649556
+        ]
+      },
+      "S3": {
+        "verdict": "supported",
+        "diff": 0.02777777777777779,
+        "ci95": [
+          -0.028575533661740562,
+          0.08982204131063713
+        ]
+      },
+      "S4": {
+        "verdict": "supported",
+        "diff": 0.0,
+        "ci95": [
+          -0.08589286892275216,
+          0.09038812392426848
+        ]
+      }
+    },
+    "m3_full_on_m2_missed_days": {
+      "caught_by_any": 33,
+      "caught_by_core": 31,
+      "caught_by_raw_net": 20,
+      "caught_by_cal_alarm": 21,
+      "caught_ONLY_by_raw_net_or_cal": 2
+    },
+    "raw_net_alone_on_m2_missed_days": 7
+  },
+  "20261015T191723Z_water_leak_m3v2_replay_m2_failure_832a58fc": {
+    "run_id": "20261015T191723Z_water_leak_m3v2_replay_m2_failure_832a58fc",
+    "m2_candidate": "thr_corr_persist",
+    "m2_missed_leak_days": 26,
+    "hypotheses": {
+      "P1": {
+        "verdict": "supported",
+        "diff": 0.5306122448979591,
+        "ci95": [
+          0.3921568627450981,
+          0.6595851063829786
+        ]
+      },
+      "P2": {
+        "verdict": "supported",
+        "diff": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "P3": {
+        "verdict": "supported",
+        "diff": 0.37118225875253397,
+        "ci95": [
+          0.2538016698460339,
+          0.5016918738084926
+        ]
+      },
+      "P4": {
+        "verdict": "inconclusive",
+        "diff": 0.05,
+        "ci95": [
+          0.01,
+          0.1
+        ]
+      }
+    },
+    "m3_full_on_m2_missed_days": {
+      "caught_by_any": 26,
+      "caught_by_core": 26,
+      "caught_by_raw_net": 26,
+      "caught_by_cal_alarm": 26,
+      "caught_ONLY_by_raw_net_or_cal": 0
+    }
+  },
+  "20261015T191949Z_water_leak_m3v3_confirm_b2a287fc": {
+    "run_id": "20261015T191949Z_water_leak_m3v3_confirm_b2a287fc",
+    "m2_candidate": "m2_corr",
+    "m2_missed_leak_days": 26,
+    "hypotheses": {
+      "R1": {
+        "verdict": "supported",
+        "diff": 0.5833160716860195,
+        "ci95": [
+          0.46534260834526997,
+          0.6939827269343122
+        ]
+      },
+      "R2": {
+        "verdict": "supported",
+        "diff": 0.6046511627906976,
+        "ci95": [
+          0.5127777777777778,
+          0.6785714285714286
+        ]
+      },
+      "R3": {
+        "verdict": "supported",
+        "diff": 0.24375736586515795,
+        "ci95": [
+          0.08168749992115205,
+          0.4715632702255753
+        ]
+      },
+      "R4": {
+        "verdict": "inconclusive",
+        "diff": -58.596638655462186,
+        "ci95": [
+          -120.88894736842106,
+          1.4442857142857062
+        ]
+      },
+      "R5": {
+        "verdict": "inconclusive",
+        "diff": 0.011049723756906077,
+        "ci95": [
+          -0.04055041883989253,
+          0.05979077571869802
+        ]
+      },
+      "R6": {
+        "verdict": "inconclusive",
+        "diff": 0.016574585635359115,
+        "ci95": [
+          -0.022099447513812154,
+          0.06180560401981994
+        ]
+      },
+      "R7": {
+        "verdict": "supported",
+        "diff": 0.3953488372093023,
+        "ci95": [
+          0.23809523809523808,
+          0.5400135135135136
+        ]
+      },
+      "R8": {
+        "verdict": "supported",
+        "diff": -0.027624309392265192,
+        "ci95": [
+          -0.06843010303536619,
+          0.0
+        ]
+      },
+      "R9": {
+        "verdict": "supported",
+        "diff": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "m3_full_on_m2_missed_days": {
+      "caught_by_any": 26,
+      "caught_by_core": 26,
+      "caught_by_raw_net": 21,
+      "caught_by_cal_alarm": 23,
+      "caught_ONLY_by_raw_net_or_cal": 0
+    },
+    "raw_net_alone_on_m2_missed_days": 17
+  },
+  "20261015T192041Z_water_leak_m3v3_stress_midnight_3eca57dc": {
+    "run_id": "20261015T192041Z_water_leak_m3v3_stress_midnight_3eca57dc",
+    "m2_candidate": "m2_corr",
+    "m2_missed_leak_days": 77,
+    "hypotheses": {
+      "N1": {
+        "verdict": "supported",
+        "diff": 0.6703296703296703,
+        "ci95": [
+          0.6067138787782878,
+          0.7339473941050166
+        ]
+      },
+      "N2": {
+        "verdict": "supported",
+        "diff": 0.5750000000000001,
+        "ci95": [
+          0.41666666666666663,
+          0.717948717948718
+        ]
+      },
+      "N3": {
+        "verdict": "supported",
+        "diff": 0.3516483516483516,
+        "ci95": [
+          0.21173374613003093,
+          0.48810876623376626
+        ]
+      },
+      "N4": {
+        "verdict": "inconclusive",
+        "diff": 0.46616541353383456,
+        "ci95": [
+          -0.015625,
+          1.4960365853658535
+        ]
+      }
+    },
+    "m3_full_on_m2_missed_days": {
+      "caught_by_any": 61,
+      "caught_by_core": 60,
+      "caught_by_raw_net": 49,
+      "caught_by_cal_alarm": 51,
+      "caught_ONLY_by_raw_net_or_cal": 1
+    },
+    "raw_net_alone_on_m2_missed_days": 36
+  },
+  "20261015T192130Z_water_leak_m3v3_stress_coldstart_763d7329": {
+    "run_id": "20261015T192130Z_water_leak_m3v3_stress_coldstart_763d7329",
+    "m2_candidate": "m2_corr",
+    "m2_missed_leak_days": 87,
+    "hypotheses": {
+      "C1": {
+        "verdict": "supported",
+        "diff": 0.8058252427184467,
+        "ci95": [
+          0.7368301435406699,
+          0.8713186759852456
+        ]
+      },
+      "C2": {
+        "verdict": "supported",
+        "diff": 0.16504854368932043,
+        "ci95": [
+          0.07070707070707072,
+          0.2605133357690903
+        ]
+      },
+      "C3": {
+        "verdict": "supported",
+        "diff": 0.737864077669903,
+        "ci95": [
+          0.6315457762052189,
+          0.8365384615384615
+        ]
+      },
+      "C4": {
+        "verdict": "inconclusive",
+        "diff": 0.009708737864077666,
+        "ci95": [
+          0.0,
+          0.03157894736842104
+        ]
+      },
+      "C5": {
+        "verdict": "supported",
+        "diff": -0.04132231404958678,
+        "ci95": [
+          -0.07377808136004857,
+          -0.009345794392523364
+        ]
+      }
+    },
+    "m3_full_on_m2_missed_days": {
+      "caught_by_any": 83,
+      "caught_by_core": 81,
+      "caught_by_raw_net": 80,
+      "caught_by_cal_alarm": 81,
+      "caught_ONLY_by_raw_net_or_cal": 2
+    },
+    "raw_net_alone_on_m2_missed_days": 76
+  },
+  "20261015T192223Z_water_leak_m3v3_stress_sensors_54ce44af": {
+    "run_id": "20261015T192223Z_water_leak_m3v3_stress_sensors_54ce44af",
+    "m2_candidate": "m2_corr",
+    "m2_missed_leak_days": 48,
+    "hypotheses": {
+      "S1": {
+        "verdict": "supported",
+        "diff": 0.841904271466451,
+        "ci95": [
+          0.7483295321771638,
+          0.9195181163192252
+        ]
+      },
+      "S2": {
+        "verdict": "supported",
+        "diff": 0.5028967016532673,
+        "ci95": [
+          0.29671026719180316,
+          0.793901065188313
+        ]
+      },
+      "S3": {
+        "verdict": "supported",
+        "diff": -0.04624277456647399,
+        "ci95": [
+          -0.12739531101775312,
+          0.0449438202247191
+        ]
+      },
+      "S4": {
+        "verdict": "supported",
+        "diff": 0.028901734104046242,
+        "ci95": [
+          -0.024715099715099713,
+          0.0967741935483871
+        ]
+      }
+    },
+    "m3_full_on_m2_missed_days": {
+      "caught_by_any": 40,
+      "caught_by_core": 39,
+      "caught_by_raw_net": 18,
+      "caught_by_cal_alarm": 26,
+      "caught_ONLY_by_raw_net_or_cal": 1
+    },
+    "raw_net_alone_on_m2_missed_days": 10
+  },
+  "20261015T192322Z_water_leak_m3v3_replay_m2_failure_641b838d": {
+    "run_id": "20261015T192322Z_water_leak_m3v3_replay_m2_failure_641b838d",
+    "m2_candidate": "thr_corr_persist",
+    "m2_missed_leak_days": 23,
+    "hypotheses": {
+      "P1": {
+        "verdict": "supported",
+        "diff": 0.4693877551020408,
+        "ci95": [
+          0.32756962864721484,
+          0.6097899728997289
+        ]
+      },
+      "P2": {
+        "verdict": "supported",
+        "diff": 0.020408163265306145,
+        "ci95": [
+          0.0,
+          0.06674418604651154
+        ]
+      },
+      "P3": {
+        "verdict": "supported",
+        "diff": 0.3683640338250749,
+        "ci95": [
+          0.24614149861787876,
+          0.5000046454196698
+        ]
+      },
+      "P4": {
+        "verdict": "supported",
+        "diff": -0.05,
+        "ci95": [
+          -0.1,
+          -0.01
+        ]
+      }
+    },
+    "m3_full_on_m2_missed_days": {
+      "caught_by_any": 23,
+      "caught_by_core": 23,
+      "caught_by_raw_net": 23,
+      "caught_by_cal_alarm": 23,
+      "caught_ONLY_by_raw_net_or_cal": 0
+    }
+  }
+}
