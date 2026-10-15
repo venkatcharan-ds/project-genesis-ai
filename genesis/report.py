@@ -68,9 +68,9 @@ def render_report(cfg: dict[str, Any], s: dict[str, Any]) -> str:
         L += [f"### {name}", "",
               f"- Event recall — burst: {bt['burst']['detected']}/{bt['burst']['n']}, "
               f"gradual: {bt['gradual']['detected']}/{bt['gradual']['n']}",
-              f"- Missed leaks (final rate, L/min): "
-              f"{', '.join(f'{m['leak_type']} {m['leak_final_rate']:.2f}' for m in fa['missed_events']) or 'none'}",
-              f"- Smallest detected leak: {_f(fa['smallest_detected_leak_lpm'], 2)} L/min",
+              f"- Missed leaks (peak rate reached in episode, L/min): "
+              f"{', '.join(f'{m['leak_type']} {m['leak_peak_rate']:.2f}' for m in fa['missed_events']) or 'none'}",
+              f"- Smallest detected leak (peak rate): {_f(fa['smallest_detected_leak_lpm'], 2)} L/min",
               f"- Leak-free episodes with ≥1 false alarm: {fa['false_alarm_episodes']} "
               f"(with demand spike: {_f(fa['false_alarm_rate_with_demand_spike'], 2)}, "
               f"without: {_f(fa['false_alarm_rate_without_demand_spike'], 2)})",

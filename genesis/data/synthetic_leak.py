@@ -87,7 +87,7 @@ def generate_episode(cfg: GeneratorConfig, episode_id: int, rng: np.random.Gener
     demand = cfg.base_demand * _diurnal(t) * (1.0 + ar)
 
     meta: dict = {"has_leak": False, "leak_type": None, "leak_start": None,
-                  "leak_final_rate": 0.0, "demand_spike": False}
+                  "leak_final_rate": 0.0, "leak_peak_rate": 0.0, "demand_spike": False}
 
     if rng.random() < cfg.demand_spike_probability:
         dur = int(rng.integers(*cfg.demand_spike_minutes))
@@ -109,7 +109,10 @@ def generate_episode(cfg: GeneratorConfig, episode_id: int, rng: np.random.Gener
             k = np.arange(n - start)
             leak[start:] = rate * np.clip((k + 1) / ramp, 0.0, 1.0)
             kind = "gradual"
-        meta.update(has_leak=True, leak_type=kind, leak_start=start, leak_final_rate=rate)
+        # Peak rate actually reached inside the episode: a late-starting gradual leak
+        # may never reach its final rate, so judge detectability on this value.
+        meta.update(has_leak=True, leak_type=kind, leak_start=start, leak_final_rate=rate,
+                    leak_peak_rate=float(leak.max()))
 
     lag = int(rng.integers(0, cfg.max_lag_minutes + 1))
     demand_lagged = np.concatenate([np.full(lag, demand[0]), demand[: n - lag]]) if lag else demand

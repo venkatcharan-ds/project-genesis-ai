@@ -23,8 +23,8 @@ def analyze_failures(per_episode: list[dict[str, Any]]) -> dict[str, Any]:
         by_type[kind] = {"n": len(rows), "detected": sum(r["detected"] for r in rows),
                          "recall": _rate(sum(r["detected"] for r in rows), len(rows))}
 
-    missed = sorted((r for r in leak if not r["detected"]), key=lambda r: r["leak_final_rate"])
-    smallest_detected = min((r["leak_final_rate"] for r in leak if r["detected"]), default=None)
+    missed = sorted((r for r in leak if not r["detected"]), key=lambda r: r["leak_peak_rate"])
+    smallest_detected = min((r["leak_peak_rate"] for r in leak if r["detected"]), default=None)
 
     fa = [r for r in clean if r["false_alarm"]]
     fa_spike = sum(r["demand_spike"] for r in fa)
@@ -34,7 +34,7 @@ def analyze_failures(per_episode: list[dict[str, Any]]) -> dict[str, Any]:
 
     findings = {
         "recall_by_leak_type": by_type,
-        "missed_events": [{k: r[k] for k in ("episode_id", "leak_type", "leak_final_rate")} for r in missed],
+        "missed_events": [{k: r[k] for k in ("episode_id", "leak_type", "leak_peak_rate")} for r in missed],
         "smallest_detected_leak_lpm": smallest_detected,
         "false_alarm_episodes": len(fa),
         "false_alarm_rate_with_demand_spike": _rate(fa_spike, clean_spike),

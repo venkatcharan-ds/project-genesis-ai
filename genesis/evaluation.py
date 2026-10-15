@@ -48,7 +48,7 @@ def evaluate(detector: Detector, episodes: list[Episode]) -> dict[str, Any]:
     for ep, p in zip(episodes, preds):
         row: dict[str, Any] = {"episode_id": ep.episode_id, "confusion": confusion(ep.label, p),
                                "leak_type": ep.meta["leak_type"],
-                               "leak_final_rate": round(ep.meta["leak_final_rate"], 3),
+                               "leak_peak_rate": round(ep.meta["leak_peak_rate"], 3),
                                "meter_bias": round(ep.meta["meter_bias"], 3),
                                "demand_spike": ep.meta["demand_spike"]}
         if ep.meta["has_leak"]:
