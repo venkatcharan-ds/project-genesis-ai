@@ -2,7 +2,8 @@
 
 **GENESIS is an AI-powered invention and engineering agent.** It takes a real-world problem, generates candidate solutions, builds prototypes, runs controlled experiments, compares them with measurable evidence, and improves them through bounded iterations, keeping a tamper-evident record of everything it did.
 
-> **Status: Milestone 1 (MVP), a working end-to-end loop on a synthetic water-leak detection problem.**
+> **Status: Milestone 2 complete.** Milestone 1 built the end-to-end loop; Milestone 2 added causal signal
+> corrections, pre-registered hypotheses with paired-bootstrap verdicts, stress tests, and reproducibility checks.
 > All results in this repo come from **synthetic data**. Nothing here is validated on physical pipes or sensors yet.
 
 ---
@@ -26,6 +27,20 @@ problem (YAML) ──► synthetic data ──► 3 candidate detectors ──�
 | Identify failures | `genesis/analysis.py`: misses by leak type and size, false alarms vs confounders |
 | Bounded improvement | Coordinate search with `max_iterations`, `max_evaluations`, `min_delta` hard limits |
 | Reproducible evidence | Hash-chained `experiments/ledger.jsonl`, config hash, data SHA-256, git commit |
+
+## Milestone 2 results (synthetic): [`full report`](reports/milestone-2-false-alarm-reduction.md)
+
+Fixes tested: per-day **meter-delay correction**, **daily baseline recalibration**, **alarm persistence**, and a
+**per-day false-alarm budget** in the tuning objective.
+
+- **Replicated on fresh data:** at a matched false-alarm budget, corrections raised test F1 by +0.074 / +0.065 / +0.059
+  (threshold / CUSUM / Isolation Forest). All three paired-bootstrap CIs exclude 0. Overall, 8 of 12 confirmatory
+  hypotheses were supported, 4 inconclusive, 0 contradicted.
+- **Not supported:** that the fixes reduce *days with false alarms*. The tuner converts the noise reduction into
+  sensitivity instead. Persistence showed no measurable benefit.
+- **Critical limitation found and measured:** if a leak is already running when the day starts, daily
+  recalibration absorbs it into the baseline. Leak-event recall dropped from 1.00 to 0.47 (threshold) and
+  0.53 (CUSUM), and from 1.00 to 0.76 (Isolation Forest). Do not use recalibration alone.
 
 ## Milestone 1 results (synthetic, held-out test set: 60 episodes / 86,400 samples)
 
@@ -52,9 +67,11 @@ cd project-genesis-ai
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements-dev.txt
 
-python -m pytest -q                                        # 28 tests
-python -m genesis run --config configs/water_leak.yaml     # ~15 s on a laptop-class CPU
-python -m genesis verify-ledger                            # check evidence integrity
+python -m pytest -q                                                 # 52 tests
+python -m genesis run --config configs/water_leak.yaml              # Milestone 1, ~15 s
+python -m genesis run --config configs/water_leak_m2_confirm.yaml   # Milestone 2 confirmatory, ~1 min
+python -m genesis check-repro experiments/runs/<run_id>             # re-run a recorded run, compare results
+python -m genesis verify-ledger                                     # check evidence integrity
 ```
 
 Each run writes `experiments/runs/<run_id>/{config.json,results.json,report.md}` and appends to `experiments/ledger.jsonl`.
@@ -64,6 +81,7 @@ Each run writes `experiments/runs/<run_id>/{config.json,results.json,report.md}`
 ```
 genesis/
   data/synthetic_leak.py     # simulator: flows, pressure, leaks, confounders (SYNTHETIC)
+  preprocess.py              # M2: causal meter-delay correction + daily bias recalibration
   detectors/                 # candidate solutions + registry
     base.py                  #   Detector interface, causal smoothing
     mass_balance.py          #   A: smoothed inflow-outflow threshold
@@ -72,11 +90,13 @@ genesis/
   evaluation.py              # metrics, event metrics, runtime, bootstrap CIs, objective
   improvement.py             # bounded improvement loop (validation only)
   analysis.py                # failure analysis + untested hypotheses
+  hypotheses.py              # M2: pre-registered hypotheses, paired-bootstrap verdicts
+  repro.py                   # M2: re-run a recorded experiment and diff the results
   ledger.py                  # hash-chained evidence ledger
   pipeline.py                # end-to-end orchestration
   report.py                  # markdown report (always carries the synthetic banner)
   cli.py                     # `python -m genesis run | verify-ledger`
-configs/water_leak.yaml      # experiment definition
+configs/                     # experiment definitions (M1, M2 exploratory/confirm/stress)
 experiments/                 # run artifacts + ledger (committed as evidence)
 reports/                     # curated milestone reports
 docs/architecture.md         # design + roadmap
@@ -88,12 +108,14 @@ tests/                       # unit, causality, reproducibility, end-to-end
 1. **No fabricated results.** Every number in a report is computed by code in this repo from a recorded run.
 2. **Synthetic is labelled synthetic.** The config refuses to run unless `synthetic: true`, and every report carries the banner.
 3. **Test set is sacred.** Tuning sees train/val only. Test is evaluated once per configuration, after tuning.
+   Hypotheses are pre-registered in the ledger; hypotheses revised after seeing results are tested on fresh data.
 4. **Bounded autonomy.** Improvement loops have hard iteration and evaluation budgets.
 5. **Secrets stay out of Git.** Use `.env` (git-ignored). See `.env.example`. Milestone 1 needs no credentials.
 
 ## Roadmap
 
-See [`docs/architecture.md`](docs/architecture.md#roadmap). Next up: test the three failure hypotheses (per-episode recalibration, lag compensation, trend features) as new candidates, and add a per-day false-alarm budget to the objective.
+See [`docs/architecture.md`](docs/architecture.md#roadmap). Next up (Milestone 3): a *baseline guard* that fixes the
+pre-existing-leak failure, gated on the stress test that exposed it.
 
 ---
 *Built with Claude Code.*
