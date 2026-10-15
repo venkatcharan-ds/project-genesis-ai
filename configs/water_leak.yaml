@@ -1,0 +1,49 @@
+# GENESIS experiment: water-leak detection on SYNTHETIC sensor data.
+experiment:
+  name: water_leak_v1
+  synthetic: true          # required; real-data runs are not supported yet
+  seed: 42
+
+problem:
+  statement: |
+    Detect water leaks in an instrumented pipe segment (inlet flow, outlet flow,
+    pressure; 1 sample/minute) as early as possible while keeping false alarms
+    rare. Constraint: detectors must be causal (no future data).
+  success_criteria:
+    max_timestep_fpr: 0.01
+
+data:                      # see genesis/data/synthetic_leak.py:GeneratorConfig
+  n_episodes: 240
+  episode_minutes: 1440
+  leak_probability: 0.5
+  meter_bias_std: 0.5
+  demand_spike_probability: 0.3
+
+split: {train: 0.5, val: 0.25, test: 0.25}
+
+candidates:
+  - name: mass_balance_threshold
+    params: {window: 15, k: 4.0}
+    search_space:
+      window: [5, 10, 15, 30, 60, 120]
+      k: [2.0, 3.0, 4.0, 5.0, 6.0, 8.0]
+  - name: cusum
+    params: {drift: 0.5, h: 20.0}
+    search_space:
+      drift: [0.1, 0.25, 0.5, 1.0, 1.5]
+      h: [5.0, 10.0, 20.0, 40.0, 80.0, 160.0]
+  - name: isolation_forest
+    params: {window: 15, threshold_quantile: 0.01}
+    search_space:
+      window: [5, 15, 30, 60, 120]
+      threshold_quantile: [0.001, 0.003, 0.01, 0.03]
+
+evaluation:
+  bootstrap_samples: 1000  # episode-level bootstrap for 95% confidence intervals
+
+improvement:
+  max_iterations: 8        # hard bound on accepted improvement steps
+  max_evaluations: 30      # hard bound on candidate evaluations per detector
+  min_delta: 0.002         # minimum validation-objective gain to accept a step
+  max_fpr: 0.01            # timestep false-positive-rate budget
+  fpr_penalty: 10.0        # objective = F1 - penalty * max(0, FPR - max_fpr)
