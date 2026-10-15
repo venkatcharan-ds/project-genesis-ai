@@ -17,8 +17,9 @@ from typing import Any
 import numpy as np
 import sklearn
 
-from genesis.analysis import analyze_failures
+from genesis.analysis import analyze_failures, missed_leak_events, safeguard_attribution
 from genesis.config import config_hash
+from genesis.data.sequences import SiteConfig, generate_sites, split_sites
 from genesis.data.synthetic_leak import GeneratorConfig, dataset_fingerprint, generate_dataset, split_episodes
 from genesis.detectors import build
 from genesis.evaluation import bootstrap_ci, evaluate
@@ -69,12 +70,21 @@ def run_experiment(cfg: dict[str, Any], out_root: str | Path, ledger_path: str |
 
     # 1. Data (synthetic) ------------------------------------------------------
     seed = cfg["experiment"]["seed"]
-    gen_cfg = GeneratorConfig(**cfg["data"])
-    episodes = generate_dataset(gen_cfg, seed)
-    splits = split_episodes(episodes, cfg["split"], seed)
+    data_cfg = dict(cfg["data"])
+    if data_cfg.pop("generator", "single_day") == "multi_day":
+        # Milestone 3: consecutive days per site; split by whole site.
+        episodes = generate_sites(SiteConfig(**data_cfg), seed)
+        splits = split_sites(episodes, cfg["split"], seed)
+    else:
+        episodes = generate_dataset(GeneratorConfig(**data_cfg), seed)
+        splits = split_episodes(episodes, cfg["split"], seed)
     data_info = {name: {"episodes": len(eps), "samples": int(sum(len(e) for e in eps)),
                         "leak_episodes": sum(e.meta["has_leak"] for e in eps),
                         "positive_samples": int(sum(e.label.sum() for e in eps)),
+                        "sites": len({e.meta.get("site_id", e.episode_id) for e in eps}),
+                        "preexisting_leak_days": sum(bool(e.meta.get("preexisting_leak")) for e in eps),
+                        "missing_minutes": int(sum(np.isnan(e.flow_in).sum() + np.isnan(e.flow_out).sum()
+                                                   for e in eps)),
                         "fingerprint_sha256": dataset_fingerprint(eps)} for name, eps in splits.items()}
     log("dataset_generated", {"synthetic": True, "seed": seed, "splits": data_info})
 
@@ -104,9 +114,12 @@ def run_experiment(cfg: dict[str, Any], out_root: str | Path, ledger_path: str |
         baseline_test = _fit_and_test(name, initial, splits["train"], splits["test"], **boot)
         tuned_test = _fit_and_test(name, search["best_params"], splits["train"], splits["test"], **boot)
         failures = analyze_failures(tuned_test["per_episode"])
+        failures["missed_leak_events"] = missed_leak_events(tuned_test["per_episode"])
+        attribution = safeguard_attribution(tuned_test["per_episode"])
         results[cid] = {"detector": name, "description": cand.get("description", ""),
                         "initial_params": initial, "improvement": search,
-                         "test_initial": baseline_test, "test_tuned": tuned_test, "failure_analysis": failures}
+                         "test_initial": baseline_test, "test_tuned": tuned_test, "failure_analysis": failures,
+                        "attribution": attribution}
         log("test_evaluation", {"detector": cid, "params": search["best_params"],
                                 "timestep": tuned_test["timestep"], "event": tuned_test["event"],
                                 "runtime": tuned_test["runtime"], "timestep_ci95": tuned_test["timestep_ci95"],

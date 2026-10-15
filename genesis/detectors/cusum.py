@@ -17,7 +17,7 @@ class CusumDetector(Detector):
     name = "cusum"
     default_params = {"drift": 0.5, "h": 20.0}
 
-    def fit(self, episodes: list[Episode]) -> "CusumDetector":
+    def _fit(self, episodes: list[Episode]) -> "CusumDetector":
         normal = np.concatenate([self.residual(ep)[self.fit_mask(ep)] for ep in episodes])
         self.mu_ = float(normal.mean())
         self.sigma_ = float(normal.std()) or 1e-9

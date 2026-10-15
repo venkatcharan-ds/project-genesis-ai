@@ -38,26 +38,44 @@ def render_report(cfg: dict[str, Any], s: dict[str, Any]) -> str:
         for cid, r in s["results"].items():
             L.append(f"| {cid} | {r['detector']} | {r.get('description', '')} |")
 
-    L += ["", "## Held-out test results (tuned parameters)", "",
-          "| Candidate | Precision | Recall | FPR | F1 | Event recall | Median delay (min) | "
-          "Leak-free days w/ false alarm | All days w/ false alarm | Predict µs/sample | Fit s |",
-          "|---|---|---|---|---|---|---|---|---|---|---|"]
-    for name in s["ranking_by_test_f1"]:
-        t = s["results"][name]["test_tuned"]
-        ts, ev, rt = t["timestep"], t["event"], t["runtime"]
-        L.append(f"| {name} | {_f(ts['precision'])} | {_f(ts['recall'])} | {_f(ts['false_positive_rate'], 4)} | "
-                 f"{_f(ts['f1'])} | {_f(ev['event_recall'])} | {_f(ev['median_detection_delay_min'], 0)} | "
-                 f"{_f(ev['episode_false_alarm_rate'])} | {_f(ev.get('day_false_alarm_rate'))} | "
-                 f"{_f(rt['predict_us_per_sample'], 2)} | {_f(rt['fit_seconds'], 3)} |")
+    multi_day = any("sites" in d and d["sites"] < d["episodes"] for d in s["data"].values())
+    L += ["", "## Held-out test results (tuned parameters)", ""]
+    if multi_day:
+        L += ["Multi-day data: a **leak event** may span several days and counts once. "
+              "*Leak-day recall* counts each day with a leak separately.", "",
+              "| Candidate | Precision | Recall | FPR | F1 | Leak-event recall | Leak-day recall | "
+              "Mean event delay (min) | False alarms per leak-free day | Leak-free days w/ FA | "
+              "Predict µs/sample | Fit s |",
+              "|---|---|---|---|---|---|---|---|---|---|---|---|"]
+        for name in s["ranking_by_test_f1"]:
+            t = s["results"][name]["test_tuned"]
+            ts, ev, rt = t["timestep"], t["event"], t["runtime"]
+            L.append(f"| {name} | {_f(ts['precision'])} | {_f(ts['recall'])} | {_f(ts['false_positive_rate'], 4)} | "
+                     f"{_f(ts['f1'])} | {_f(ev['leak_event_recall'])} | {_f(ev['event_recall'])} | "
+                     f"{_f(ev['mean_event_delay_min'], 0)} | {_f(ev['false_alarms_per_clean_day'])} | "
+                     f"{_f(ev['episode_false_alarm_rate'])} | {_f(rt['predict_us_per_sample'], 2)} | "
+                     f"{_f(rt['fit_seconds'], 3)} |")
+    else:
+        L += ["| Candidate | Precision | Recall | FPR | F1 | Event recall | Median delay (min) | "
+              "Leak-free days w/ false alarm | All days w/ false alarm | Predict µs/sample | Fit s |",
+              "|---|---|---|---|---|---|---|---|---|---|---|"]
+        for name in s["ranking_by_test_f1"]:
+            t = s["results"][name]["test_tuned"]
+            ts, ev, rt = t["timestep"], t["event"], t["runtime"]
+            L.append(f"| {name} | {_f(ts['precision'])} | {_f(ts['recall'])} | {_f(ts['false_positive_rate'], 4)} | "
+                     f"{_f(ts['f1'])} | {_f(ev['event_recall'])} | {_f(ev['median_detection_delay_min'], 0)} | "
+                     f"{_f(ev['episode_false_alarm_rate'])} | {_f(ev.get('day_false_alarm_rate'))} | "
+                     f"{_f(rt['predict_us_per_sample'], 2)} | {_f(rt['fit_seconds'], 3)} |")
 
-    ci_keys = [k for k in ("f1", "false_positive_rate", "event_recall", "day_false_alarm_rate")
-               if k in next(iter(s["results"].values()))["test_tuned"]["timestep_ci95"]]
+    wanted = (("f1", "leak_event_recall", "false_alarms_per_clean_day", "mean_event_delay") if multi_day
+              else ("f1", "false_positive_rate", "event_recall", "day_false_alarm_rate"))
+    ci_keys = [k for k in wanted if k in next(iter(s["results"].values()))["test_tuned"]["timestep_ci95"]]
     L += ["", "Runtime is wall-clock on the machine that produced this run and will vary between machines.",
           "", "### 95% confidence intervals (episode-level bootstrap, test set)", "",
           "| Candidate | " + " | ".join(ci_keys) + " |", "|---" * (len(ci_keys) + 1) + "|"]
     for name in s["ranking_by_test_f1"]:
         ci = s["results"][name]["test_tuned"]["timestep_ci95"]
-        nd = lambda k: 4 if k == "false_positive_rate" else 3  # noqa: E731
+        nd = lambda k: 4 if k == "false_positive_rate" else 0 if k == "mean_event_delay" else 3  # noqa: E731
         L.append(f"| {name} | " + " | ".join(f"[{_f(ci[k][0], nd(k))}, {_f(ci[k][1], nd(k))}]"
                                              for k in ci_keys) + " |")
     L += ["", "Overlapping marginal intervals do not settle a ranking. Pre-registered comparisons below "
@@ -77,6 +95,24 @@ def render_report(cfg: dict[str, Any], s: dict[str, Any]) -> str:
             L.append(f"| {h['id']} | {h['statement']} | {h['baseline']} → {h['candidate']} | "
                      f"{h['metric']} ({h['direction']}{margin}) | {_f(h['a'])} | {_f(h['b'])} | "
                      f"{_f(h['diff'])} [{_f(lo)}, {_f(hi)}] | **{h['verdict']}** |")
+
+    attributed = {cid: r["attribution"] for cid, r in s["results"].items() if r.get("attribution")}
+    if attributed:
+        L += ["", "## Safeguard attribution (test set, tuned parameters)", "",
+              "Which component raised the alarm. *Core* = calibrated mass-balance detector, *raw* = "
+              "independent raw-signal safety net, *cal* = leak-like-calibration alarm. A day can count "
+              "under several components.", "",
+              "| Candidate | Leak days | Caught by core / raw / cal | Caught ONLY by raw net | "
+              "Caught ONLY by cal alarm | Pre-existing leak days caught (core / raw / cal of N) | "
+              "False-alarm days by core / raw / cal | Calibration status counts |",
+              "|---|---|---|---|---|---|---|---|"]
+        for cid, a in attributed.items():
+            db, pb, fb = a["detected_by"], a["preexisting_detected_by"], a["false_alarm_days_by"]
+            st = ", ".join(f"{k} {v}" for k, v in sorted(a["calibration_status_counts"].items()))
+            L.append(f"| {cid} | {a['leak_days']} | {db['core']} / {db['raw']} / {db['cal']} | "
+                     f"{a['caught_only_by_raw_net']} | {a['caught_only_by_cal_alarm']} | "
+                     f"{pb['core']} / {pb['raw']} / {pb['cal']} of {a['preexisting_leak_days']} | "
+                     f"{fb['core']} / {fb['raw']} / {fb['cal']} | {st} |")
 
     L += ["", "## Did the improvement loop help? (test set, initial vs tuned)", "",
           "| Candidate | Initial params | Tuned params | Test F1 initial | Test F1 tuned | Iterations | Stop reason |",
@@ -99,6 +135,15 @@ def render_report(cfg: dict[str, Any], s: dict[str, Any]) -> str:
                  f"{bt['gradual']['detected']}/{bt['gradual']['n']} | {missed} | {fa['false_alarm_episodes']} | "
                  f"{_f(fa['false_alarm_rate_with_demand_spike'], 2)} | "
                  f"{_f(fa['false_alarm_rate_without_demand_spike'], 2)} | {fa['pre_leak_false_alarms']} |")
+    if multi_day:
+        L += ["", "### Missed leak events (whole event never alarmed)", "",
+              "| Candidate | Missed events | Details (type, peak L/min, days, already running at a day start?) |",
+              "|---|---|---|"]
+        for name, r in s["results"].items():
+            me = r["failure_analysis"].get("missed_leak_events", [])
+            det = "; ".join(f"{e['leak_type']} {e['peak_rate']:.2f}, {e['days']}d"
+                            f"{', pre-existing' if e['preexisting_on_some_day'] else ''}" for e in me) or "none"
+            L.append(f"| {name} | {len(me)} | {det} |")
     L += ["", "Missed-leak codes: `b` = burst, `g` = gradual, followed by peak leak rate reached in the episode.",
           "", "### Auto-generated hypotheses for the next iteration (**untested**)", ""]
     for name, r in s["results"].items():

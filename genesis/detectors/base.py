@@ -42,6 +42,31 @@ def require_persistence(alarm: np.ndarray, n: int) -> np.ndarray:
     return (run == n) & (idx >= n)
 
 
+def ffill(x: np.ndarray, lead: np.ndarray | float = 0.0) -> np.ndarray:
+    """Causal forward-fill of NaN gaps. NaNs before the first valid sample have no
+    past to copy, so they take `lead` (a value or a same-time array)."""
+    if not np.isnan(x).any():
+        return x
+    idx = np.where(np.isnan(x), -1, np.arange(len(x)))
+    np.maximum.accumulate(idx, out=idx)
+    out = x[np.maximum(idx, 0)].astype(float)
+    head = idx < 0
+    out[head] = (lead[head] if isinstance(lead, np.ndarray) else lead)
+    return out
+
+
+def filled(ep: Episode) -> Episode:
+    """Episode with sensor gaps forward-filled: the naive missing-data policy of the
+    Milestone 1-2 detectors. Returns `ep` itself when nothing is missing, so results
+    on gap-free data are bit-identical to earlier milestones. A flow meter missing at
+    the start of the day mirrors the other meter (zero imbalance = no evidence)."""
+    if not (np.isnan(ep.flow_in).any() or np.isnan(ep.flow_out).any() or np.isnan(ep.pressure).any()):
+        return ep
+    fin = ffill(ep.flow_in, lead=np.nan_to_num(ep.flow_out))
+    fout = ffill(ep.flow_out, lead=fin)
+    return Episode(ep.episode_id, fin, fout, ffill(ep.pressure), ep.leak_rate, ep.label, ep.meta)
+
+
 class Detector(ABC):
     """A candidate solution. Must be causal: predict(t) may only use data <= t."""
 
@@ -75,17 +100,26 @@ class Detector(ABC):
         return mask
 
     # -- interface ---------------------------------------------------------------
-    @abstractmethod
     def fit(self, episodes: list[Episode]) -> "Detector":
         """Calibrate on training episodes. May use labels only to select leak-free samples."""
+        return self._fit([filled(ep) for ep in episodes])
+
+    @abstractmethod
+    def _fit(self, episodes: list[Episode]) -> "Detector":
+        """Fit on gap-filled episodes."""
 
     @abstractmethod
     def raw_alarms(self, episode: Episode) -> np.ndarray:
-        """Per-timestep alarm decision before persistence filtering."""
+        """Per-timestep alarm decision before persistence filtering (gap-filled input)."""
 
     def predict(self, episode: Episode) -> np.ndarray:
         """Return a boolean alarm array with one entry per timestep."""
-        return require_persistence(self.raw_alarms(episode), self.params["persistence"])
+        return require_persistence(self.raw_alarms(filled(episode)), self.params["persistence"])
+
+    def predict_sequence(self, days: list[Episode]) -> list[np.ndarray]:
+        """Predict consecutive days of ONE site, in order. Stateless detectors treat
+        each day independently; stateful ones (leak_safe) carry state across days."""
+        return [self.predict(d) for d in days]
 
     def describe(self) -> dict[str, Any]:
         return {"name": self.name, "params": dict(self.params)}

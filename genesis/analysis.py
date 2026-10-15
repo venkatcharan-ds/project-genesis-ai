@@ -59,3 +59,47 @@ def analyze_failures(per_episode: list[dict[str, Any]]) -> dict[str, Any]:
                           "per-episode baseline recalibration may help.")
     findings["hypotheses_untested"] = hypotheses
     return findings
+
+
+def safeguard_attribution(per_episode: list[dict[str, Any]]) -> dict[str, Any] | None:
+    """Which component of a leak_safe detector caught each leak day, and which caused
+    false alarms. Returns None for detectors without component diagnostics."""
+    rows = [r for r in per_episode if "components" in r]
+    if not rows:
+        return None
+    leak = [r for r in rows if r["leak_type"] is not None]
+    clean = [r for r in rows if r["leak_type"] is None]
+    c = lambda r, k: r["components"][k]  # noqa: E731
+    status_counts: dict[str, int] = {}
+    for r in rows:
+        status_counts[r["components"]["status"]] = status_counts.get(r["components"]["status"], 0) + 1
+    pre = [r for r in leak if r.get("preexisting_leak")]
+    return {
+        "leak_days": len(leak),
+        "detected_by": {k: sum(c(r, f"{k}_detect") for r in leak) for k in ("core", "raw", "cal")},
+        # Safety-net evidence: leak days the calibrated core missed but another component caught.
+        "caught_only_by_raw_net": sum(c(r, "raw_detect") and not c(r, "core_detect") for r in leak),
+        "caught_only_by_cal_alarm": sum(c(r, "cal_detect") and not c(r, "core_detect")
+                                        and not c(r, "raw_detect") for r in leak),
+        "preexisting_leak_days": len(pre),
+        "preexisting_detected_by": {k: sum(c(r, f"{k}_detect") for r in pre) for k in ("core", "raw", "cal")},
+        "clean_days": len(clean),
+        "false_alarm_days_by": {k: sum(c(r, f"{k}_false_alarm") for r in clean) for k in ("core", "raw", "cal")},
+        "calibration_status_counts": status_counts,
+    }
+
+
+def missed_leak_events(per_episode: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Leak EVENTS (multi-day leaks counted once) with no alarm on any leak sample."""
+    events: dict[Any, dict[str, Any]] = {}
+    for r in per_episode:
+        if r["leak_type"] is None:
+            continue
+        key = (r.get("cluster", r["episode_id"]), r.get("leak_event_id", r["episode_id"]))
+        e = events.setdefault(key, {"event": key[1], "leak_type": r["leak_type"], "days": 0, "detected": False,
+                                    "peak_rate": 0.0, "preexisting_on_some_day": False})
+        e["days"] += 1
+        e["detected"] |= bool(r["detected"])
+        e["peak_rate"] = max(e["peak_rate"], r["leak_peak_rate"])
+        e["preexisting_on_some_day"] |= bool(r.get("preexisting_leak"))
+    return sorted((e for e in events.values() if not e["detected"]), key=lambda e: e["peak_rate"])

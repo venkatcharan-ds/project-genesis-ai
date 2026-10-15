@@ -3,10 +3,11 @@
 from genesis.detectors.base import Detector
 from genesis.detectors.cusum import CusumDetector
 from genesis.detectors.isolation_forest import IsolationForestDetector
+from genesis.detectors.leak_safe import LeakSafeDetector
 from genesis.detectors.mass_balance import MassBalanceThreshold
 
 REGISTRY: dict[str, type[Detector]] = {
-    cls.name: cls for cls in (MassBalanceThreshold, CusumDetector, IsolationForestDetector)
+    cls.name: cls for cls in (MassBalanceThreshold, CusumDetector, IsolationForestDetector, LeakSafeDetector)
 }
 
 

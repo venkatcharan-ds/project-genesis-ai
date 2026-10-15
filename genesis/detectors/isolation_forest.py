@@ -26,7 +26,7 @@ class IsolationForestDetector(Detector):
         p_res = causal_moving_average(ep.pressure - p_expected, w)
         return np.column_stack([res, p_res])
 
-    def fit(self, episodes: list[Episode]) -> "IsolationForestDetector":
+    def _fit(self, episodes: list[Episode]) -> "IsolationForestDetector":
         # Pressure ~ c0 + c1 * flow_out^2, fitted on leak-free samples only.
         q = np.concatenate([ep.flow_out[self.fit_mask(ep)] for ep in episodes])
         p = np.concatenate([ep.pressure[self.fit_mask(ep)] for ep in episodes])

@@ -17,7 +17,7 @@ class MassBalanceThreshold(Detector):
     name = "mass_balance_threshold"
     default_params = {"window": 15, "k": 4.0}
 
-    def fit(self, episodes: list[Episode]) -> "MassBalanceThreshold":
+    def _fit(self, episodes: list[Episode]) -> "MassBalanceThreshold":
         smoothed = [causal_moving_average(self.residual(ep), self.params["window"])[self.fit_mask(ep)]
                     for ep in episodes]
         normal = np.concatenate(smoothed)
